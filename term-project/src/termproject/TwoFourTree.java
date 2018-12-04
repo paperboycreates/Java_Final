@@ -51,6 +51,10 @@ public class TwoFourTree implements Dictionary {
      */
     public void insertElement(Object key, Object element) {
         
+        // 2, 3, 4 children (except for leaves)
+        // each node can store 1, 2, 3 entries
+        // num of children equals entries + 1 or 0
+        
         // check for root
         if (isEmpty()) {
             Item newItem = new Item(key, element);
