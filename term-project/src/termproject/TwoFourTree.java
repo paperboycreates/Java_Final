@@ -6,8 +6,10 @@
  * @author
  * @version 1.0
  */
-public class TwoFourTree
-        implements Dictionary {
+
+package termproject;
+
+public class TwoFourTree implements Dictionary {
 
     private Comparator treeComp;
     private int size = 0;
@@ -49,11 +51,19 @@ public class TwoFourTree
      */
     public void insertElement(Object key, Object element) {
         
-        // TODO: create an item with key and element
+        // create an item with key and element
+        Item newItem = new Item(key, element);
         
-        // TODO: use comparator
+        // check for root
+        if (root() == null) {
+            TFNode newTFNode = new TFNode();
+            newTFNode.addItem(newItem, 0);
+        }
         
         // TODO: insert into tree
+        
+        // check the tree
+        checkTree();
         
     }
 
