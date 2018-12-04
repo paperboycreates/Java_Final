@@ -48,6 +48,13 @@ public class TwoFourTree
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
+        
+        // TODO: create an item with key and element
+        
+        // TODO: use comparator
+        
+        // TODO: insert into tree
+        
     }
 
     /**
