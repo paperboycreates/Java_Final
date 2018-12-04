@@ -55,6 +55,7 @@ public class TwoFourTree implements Dictionary {
         // each node can store 1, 2, 3 entries
         // num of children equals entries + 1 or 0
         
+        
         // check for root
         if (isEmpty()) {
             Item newItem = new Item(key, element);
@@ -62,7 +63,11 @@ public class TwoFourTree implements Dictionary {
             setRoot(newTFNode);
         }
         
+        
+        
         // TODO: insert into tree
+        // for loop that comp. if newNode > curr keeps going down to find its place.
+        
         
         // check the tree
         checkTree();
