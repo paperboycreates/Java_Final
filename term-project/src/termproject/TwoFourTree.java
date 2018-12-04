@@ -63,6 +63,8 @@ public class TwoFourTree implements Dictionary {
         // check the tree
         checkTree();
         
+        size++;
+        
     }
 
     /**
