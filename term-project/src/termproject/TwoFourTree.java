@@ -51,13 +51,11 @@ public class TwoFourTree implements Dictionary {
      */
     public void insertElement(Object key, Object element) {
         
-        // create an item with key and element
-        Item newItem = new Item(key, element);
-        
         // check for root
-        if (root() == null) {
+        if (isEmpty()) {
+            Item newItem = new Item(key, element);
             TFNode newTFNode = new TFNode();
-            newTFNode.addItem(newItem, 0);
+            setRoot(newTFNode);
         }
         
         // TODO: insert into tree
