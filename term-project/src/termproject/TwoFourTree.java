@@ -60,19 +60,40 @@ public class TwoFourTree implements Dictionary {
         // All leaf nodes are the same height
         // Each node Stores 3 values at most sorted from smallest to greatest
         // A leaf node can have 2, 3 or 4 items but no children. 
-        //In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are null.
-        //INSERT IS DONE AT THE LEAF!
+        // In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are null.
+        // INSERT IS DONE AT THE LEAF!
         
-        // methods to use
+
         TFNode testTFNode = new TFNode();
+        Item testItem = new Item();
         
-        // we get to a node
-        // split and bubble up
-        if (testTFNode.getItems() == 3) {
-            // we need to grab middle and split
+        //
+        // CHECK NODE METHOD
+        // this method will tell us what to do with an item when we get to a node
+        //
+        if (testTFNode.isExternal()) {
+
+            // the node is a leaf, so check if its full (3 items)
+            if (testTFNode.isFull()) {
+                // TODO: we need to grab middle item
+                // TODO: split the node
+            } else {
+                // TODO: find where to put it
+                int numItems = testTFNode.getNumItems();
+            }
+
         } else {
-            // find where to put it
-            int numItems = testTFNode.getNumItems();
+
+            // the node is not a leaf, so move down.
+            // check if the node is full (3 items)
+            if (testTFNode.isFull()) {
+                // TODO: we need to grab middle item
+                // TODO: split the node
+            } else {
+                // TODO: find where to put it
+                int numItems = testTFNode.getNumItems();
+            }
+
         }
         
         

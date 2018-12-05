@@ -131,4 +131,19 @@ public class TFNode {
             throw new TFNodeException();
         nodeChildren[index] = child;
     }
+    
+    // EXTRA METHODS WE CREATED
+
+    public boolean isFull () {
+        return (getNumItems() == 3);
+    }
+    
+    public boolean isExternal () {
+        return (nodeChildren.length == 0);
+    }
+    
+    public boolean isInternal () {
+        return (!isExternal());
+    }
+    
 }
