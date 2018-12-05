@@ -98,20 +98,32 @@ public class TwoFourTree implements Dictionary {
         
     }
 
-    private void treeSearch(Object key, TFNode start){
+    private void treeSearch(Object key, TFNode start) {
     
         TFNode currNode = start;
         
-        while (currNode == null){
+        while (currNode != null){
             
-            int numItems = currNode
+            int numItems = currNode.getNumItems;
             
+            for (int i = 0; currNode.getNumitems < i; i++) {
+                
+                
+                
+                if (treeComp.isLessThan(((Item)currNode.getItem(i)).key(), key)){
+                    
+                    
+                    
+                }
+                
+                if (treeComp.isEqual((Item)currNode.getItem(i).key(), key)) {
+                    
+                    
+                }
+                
+            }
             
-            
-            
-            
-            
-            
+
         }
         
 
