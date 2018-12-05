@@ -54,15 +54,37 @@ public class TwoFourTree implements Dictionary {
         // 2, 3, 4 children (except for leaves)
         // each node can store 1, 2, 3 entries
         // num of children equals entries + 1 or 0
+        // 2-Node: Node has two child pointers and 1 data element.
+        // 3-Node: Node has three child pointers and 2 data elements.
+        // 4-Node: Node has four child pointers and 3 data elements.
+        // All leaf nodes are the same height
+        // Each node Stores 3 values at most sorted from smallest to greatest
+        // A leaf node can have 2, 3 or 4 items but no children. 
+        //In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are Null.
+        //INSERT IS DONE AT THE LEAF!
         
         
         // check for root
-        if (isEmpty()) {
+        if (isEmpty() && treeRoot == null) {
+            int rootIndex = 0;
             Item newItem = new Item(key, element);
             TFNode newTFNode = new TFNode();
+            TFNode.insertItem(rootIndex, newItem);
             setRoot(newTFNode);
+        } else {
+            
+            //search for left node with interval containing it.
+            //Insert
+            //Split 4-Nodes as we traverse down to find a node for insertion
+            //If items = maxitems
+            //SPECIAL CASE: If 4-Node is ROOT** split root before traversing further
+            
+            TFNode currNode = treeSearch(key, treeRoot);
+            
+            
         }
-        
+            
+           
         
         
         // TODO: insert into tree
@@ -75,6 +97,30 @@ public class TwoFourTree implements Dictionary {
         size++;
         
     }
+
+    private void treeSearch(Object key, TFNode start){
+    
+        TFNode currNode = start;
+        
+        while (currNode == null){
+            
+            int numItems = currNode
+            
+            
+            
+            
+            
+            
+            
+        }
+        
+
+}
+
+
+
+
+
 
     /**
      * Searches dictionary to determine if key is present, then
