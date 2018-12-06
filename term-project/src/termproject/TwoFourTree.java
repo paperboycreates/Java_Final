@@ -163,22 +163,7 @@ public class TwoFourTree implements Dictionary {
         } else {
             
             // Currnet is internal, handle the children
-            TFNode newleft = new TFNode();
-            
-            newleft.placeItem(leftItem, treeComp);
-            
-            newleft.setParent(curr.getParent());
-            
-            
-            
-            TFNode newRight = new TFNode();
-            
-            newRight.placeItem(rightItem, treeComp);
-            
-            newRight.setParent(curr.getParent());
-            
-            
-            
+          
             
         }
         
