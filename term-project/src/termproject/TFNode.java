@@ -146,4 +146,57 @@ public class TFNode {
         return (!isExternal());
     }
     
+    // method assumes new item won't overflow
+    public void placeItem (Item newItem, Comparator comp) {
+        
+        switch (numItems) {
+            case 0:
+                // nothing there, so just add
+                addItem(0, newItem);
+                break;
+            case 1:
+                if (comp.isLessThanOrEqualTo(newItem.key(), getItem(0).key())) {
+                    insertItem(0, newItem);
+                } else {
+                    addItem(1, newItem);
+                }
+                break;
+            default:
+                if (comp.isLessThanOrEqualTo(newItem.key(), getItem(0).key())) {
+                    // new < 0
+                    insertItem(0, newItem);
+                } else {
+                    if (comp.isLessThanOrEqualTo(newItem.key(), getItem(1).key())) {
+                        // new < 1
+                        insertItem(1, newItem);
+                    } else {
+                        // new > 0 and 1
+                        addItem(2, newItem);
+                    }
+                }
+                break;
+        }
+        
+    }
+    
+    public void split (Comparator comp) {
+        
+        // we need to grab the items
+        Item rightItem = removeItem(2);
+        Item midItem = removeItem(1);
+        Item leftItem = removeItem(0);
+        
+        if (nodeParent != null) {
+            // place middle item in parent
+            placeItem(midItem, comp);
+        } else {
+            // make new parent node
+            nodeParent = new TFNode();
+            nodeParent.insertItem(0, midItem);
+        }
+        
+        // TODO: we need to handle creating the new nodes
+                
+    }
+    
 }

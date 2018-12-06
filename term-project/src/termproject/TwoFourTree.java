@@ -9,6 +9,8 @@
 
 package termproject;
 
+import java.awt.event.ItemEvent;
+
 public class TwoFourTree implements Dictionary {
 
     private Comparator treeComp;
@@ -63,38 +65,13 @@ public class TwoFourTree implements Dictionary {
         // In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are null.
         // INSERT IS DONE AT THE LEAF!
         
-
-        TFNode testTFNode = new TFNode();
-        Item testItem = new Item();
+        Item newItem = new Item(key, element);
         
         //
-        // CHECK NODE METHOD
-        // this method will tell us what to do with an item when we get to a node
+        // FIND EXTERNAL NODE METHOD
+        // this method recursively finds an external node (assumes root isnt null)
         //
-        if (testTFNode.isExternal()) {
-
-            // the node is a leaf, so check if its full (3 items)
-            if (testTFNode.isFull()) {
-                // TODO: we need to grab middle item
-                // TODO: split the node
-            } else {
-                // TODO: find where to put it
-                int numItems = testTFNode.getNumItems();
-            }
-
-        } else {
-
-            // the node is not a leaf, so move down.
-            // check if the node is full (3 items)
-            if (testTFNode.isFull()) {
-                // TODO: we need to grab middle item
-                // TODO: split the node
-            } else {
-                // TODO: find where to put it
-                int numItems = testTFNode.getNumItems();
-            }
-
-        }
+        findExternal(treeRoot, newItem);
         
         
         // check for root
@@ -128,6 +105,41 @@ public class TwoFourTree implements Dictionary {
         checkTree();
         
         size++;
+        
+    }
+    
+    // method recursively finds an external node to place new item
+    private void findExternal(TFNode currTFNode, Item newItem) {
+        
+        if (currTFNode.isExternal()) {
+
+            // the node is a leaf, so check if its full (3 items)
+            if (currTFNode.isFull()) {
+                // we need to grab middle item
+                Item midItem = currTFNode.getItem(1);
+                // TODO: split the node
+                currTFNode.split();
+                
+            } else {
+                // TODO: test this bad boi
+                currTFNode.placeItem(newItem, treeComp);
+                
+            }
+
+        } else {
+
+            // the node is not a leaf, so try again
+            // check if the node is full (3 items)
+            if (currTFNode.isFull()) {
+                
+                // TODO: split the node
+                currTFNode.split(treeComp);
+                
+            }
+            findExternal(currTFNode, newItem);
+            
+        }
+
         
     }
 
