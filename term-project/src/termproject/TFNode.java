@@ -140,7 +140,7 @@ public class TFNode {
     }
     
     public boolean isExternal () {
-        return (nodeChildren.length == 0);
+        return (nodeChildren[0] == null);
     }
     
     public boolean isInternal () {

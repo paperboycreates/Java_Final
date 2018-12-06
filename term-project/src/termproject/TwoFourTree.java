@@ -77,12 +77,11 @@ public class TwoFourTree implements Dictionary {
         if (!isEmpty()) {
             findExternal(treeRoot, newItem);
         } else {
-            // TODO: test this
             createRoot(newItem);
         }
         
         // check the tree
-        checkTree();
+        // checkTree();
         
         size++;
         
@@ -190,6 +189,19 @@ public class TwoFourTree implements Dictionary {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
 
+        // TEST USING NUMS FROM WEBSITE
+        myTree.insertElement(3, 3);
+        myTree.insertElement(2, 2);
+        myTree.insertElement(5, 5);
+        myTree.insertElement(4, 4);
+        myTree.insertElement(2, 2);
+        myTree.insertElement(9, 9);
+        myTree.insertElement(10, 10);
+        myTree.insertElement(8, 8);
+        myTree.insertElement(7, 7);
+        myTree.insertElement(6, 6);
+        
+        
         Integer myInt1 = new Integer(47);
         myTree.insertElement(myInt1, myInt1);
         Integer myInt2 = new Integer(83);
