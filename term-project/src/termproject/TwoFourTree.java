@@ -9,6 +9,7 @@
 
 package termproject;
 
+import com.sun.xml.internal.ws.util.DOMUtil;
 import java.awt.event.ItemEvent;
 
 public class TwoFourTree implements Dictionary {
@@ -115,15 +116,11 @@ public class TwoFourTree implements Dictionary {
 
             // the node is a leaf, so check if its full (3 items)
             if (currTFNode.isFull()) {
-                // we need to grab middle item
-                Item midItem = currTFNode.getItem(1);
                 // TODO: split the node
-                currTFNode.split();
-                
+                currTFNode.split(treeComp);    
             } else {
                 // TODO: test this bad boi
-                currTFNode.placeItem(newItem, treeComp);
-                
+                currTFNode.placeItem(newItem, treeComp);   
             }
 
         } else {
@@ -131,11 +128,12 @@ public class TwoFourTree implements Dictionary {
             // the node is not a leaf, so try again
             // check if the node is full (3 items)
             if (currTFNode.isFull()) {
-                
                 // TODO: split the node
-                currTFNode.split(treeComp);
-                
+                currTFNode.split(treeComp); 
             }
+            
+            // TODO: move current to child
+            currTFNode = moveCurr(currTFNode, newItem);
             findExternal(currTFNode, newItem);
             
         }
@@ -172,11 +170,22 @@ public class TwoFourTree implements Dictionary {
         }
         
         return null;
-   }
+    }
 
-
-
-
+    // method takes a node and returns a new current for whichever child is smaller
+    public TFNode moveCurr (TFNode node, Item newItem) {  
+        TFNode currTFNode = node;
+        
+        if (treeComp.isLessThanOrEqualTo(newItem.key(), currTFNode.getItem(0).key())) {
+            // new < 0
+            currTFNode = currTFNode.getChild(0);
+        } else {
+            // new > 0
+            currTFNode = currTFNode.getChild(1);
+        }
+        
+        return currTFNode;
+    }
 
 
     /**
