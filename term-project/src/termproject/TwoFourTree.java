@@ -204,8 +204,10 @@ public class TwoFourTree implements Dictionary {
         
         Integer myInt1 = new Integer(47);
         myTree.insertElement(myInt1, myInt1);
+        
         Integer myInt2 = new Integer(83);
         myTree.insertElement(myInt2, myInt2);
+        
         Integer myInt3 = new Integer(22);
         myTree.insertElement(myInt3, myInt3);
 
