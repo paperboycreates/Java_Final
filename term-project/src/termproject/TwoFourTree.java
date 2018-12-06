@@ -143,15 +143,15 @@ public class TwoFourTree implements Dictionary {
         
     }
 
-    private void treeSearch(Object key, TFNode start) {
+    private TFNode treeSearch(Object key, TFNode start) {
     
         TFNode currNode = start;
         
         while (currNode != null){
             
-            int numItems = currNode.getNumItems;
+            int numItems = currNode.getNumItems();
             
-            for (int i = 0; currNode.getNumitems < i; i++) {
+            for (int i = 0; currNode.getNumItems() < i; i++) {
                 
                 
                 
@@ -171,8 +171,8 @@ public class TwoFourTree implements Dictionary {
 
         }
         
-
-}
+        return null;
+   }
 
 
 
