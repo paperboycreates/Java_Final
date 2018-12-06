@@ -95,7 +95,7 @@ public class TwoFourTree implements Dictionary {
             // the node is a leaf, so check if its full (3 items)
             if (currTFNode.isFull()) {
                 // TODO: split the node
-                currTFNode.split(treeComp);    
+                split(currTFNode);    
             } else {
                 // TODO: test this bad boi
                 currTFNode.placeItem(newItem, treeComp);   
@@ -107,7 +107,7 @@ public class TwoFourTree implements Dictionary {
             // check if the node is full (3 items)
             if (currTFNode.isFull()) {
                 // TODO: split the node
-                currTFNode.split(treeComp); 
+                split(currTFNode); 
             }
             
             // TODO: test this
@@ -126,6 +126,73 @@ public class TwoFourTree implements Dictionary {
         newTFNode.insertItem(0, newItem);
         setRoot(newTFNode);
     }
+    
+     private void split (TFNode curr) {
+        
+        // we need to grab the items
+        Item rightItem = curr.removeItem(2);
+        Item midItem = curr.removeItem(1);
+        Item leftItem = curr.removeItem(0);
+        
+        if (curr.getParent() == null) {
+            // place middle item in parent
+            curr.getParent().placeItem(midItem, treeComp);
+        } else {
+            // make new parent node
+            TFNode Parent = new TFNode();
+            Parent.placeItem(midItem, treeComp);
+        }
+        
+        // IF Current Doesnt havent any Children split with ease
+        if (curr.isExternal()) {
+        
+            // Make new Left Node
+            TFNode newLeft = new TFNode();
+            // Place org. left item
+            newLeft.placeItem(leftItem, treeComp);
+            // set parent to curr.Parent which removes curr
+            newLeft.setParent(curr.getParent());
+            
+            // Make new Right Node
+            TFNode newRight = new TFNode();
+            // Place org. right Item
+            newRight.placeItem(rightItem, treeComp);
+            //  set parent to curr.parent which removes curr
+            newRight.setParent(curr.getParent());
+        
+        } else {
+            
+            // Currnet is internal, handle the children
+            TFNode newleft = new TFNode();
+            
+            newleft.placeItem(leftItem, treeComp);
+            
+            newleft.setParent(curr.getParent());
+            
+            
+            
+            TFNode newRight = new TFNode();
+            
+            newRight.placeItem(rightItem, treeComp);
+            
+            newRight.setParent(curr.getParent());
+            
+            
+            
+            
+        }
+        
+        
+        
+        
+        // TODO: we need to handle creating the new nodes
+                
+    }
+    
+    
+
+    
+    
 
     private TFNode treeSearch(Object key, TFNode start) {
     

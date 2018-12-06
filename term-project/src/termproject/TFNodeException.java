@@ -7,6 +7,8 @@
  * @version 1.0
  */
 
+package termproject;
+
 public class TFNodeException extends RuntimeException {
 
     public TFNodeException() {

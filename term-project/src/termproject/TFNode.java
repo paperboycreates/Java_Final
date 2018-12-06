@@ -180,24 +180,4 @@ public class TFNode {
         
     }
     
-    public void split (Comparator comp) {
-        
-        // we need to grab the items
-        Item rightItem = removeItem(2);
-        Item midItem = removeItem(1);
-        Item leftItem = removeItem(0);
-        
-        if (nodeParent != null) {
-            // place middle item in parent
-            placeItem(midItem, comp);
-        } else {
-            // make new parent node
-            nodeParent = new TFNode();
-            nodeParent.insertItem(0, midItem);
-        }
-        
-        // TODO: we need to handle creating the new nodes
-                
-    }
-    
 }
