@@ -72,35 +72,14 @@ public class TwoFourTree implements Dictionary {
         // FIND EXTERNAL NODE METHOD
         // this method recursively finds an external node (assumes root isnt null)
         //
-        findExternal(treeRoot, newItem);
-        
         
         // check for root
-        if (isEmpty()) {
-            int rootIndex = 0;
-            Item newItem = new Item(key, element);
-            TFNode newTFNode = new TFNode();
-            TFNode.insertItem(rootIndex, newItem);
-            setRoot(newTFNode);
+        if (!isEmpty()) {
+            findExternal(treeRoot, newItem);
         } else {
-            
-            //search for left node with interval containing it.
-            //Insert
-            //Split 4-Nodes as we traverse down to find a node for insertion
-            //If items = maxitems
-            //SPECIAL CASE: If 4-Node is ROOT** split root before traversing further
-            
-            TFNode currNode = treeSearch(key, treeRoot);
-            
-            
+            // TODO: test this
+            createRoot(newItem);
         }
-            
-           
-        
-        
-        // TODO: insert into tree
-        // for loop that comp. if newNode > curr keeps going down to find its place.
-        
         
         // check the tree
         checkTree();
@@ -132,13 +111,21 @@ public class TwoFourTree implements Dictionary {
                 currTFNode.split(treeComp); 
             }
             
-            // TODO: move current to child
+            // TODO: test this
             currTFNode = moveCurr(currTFNode, newItem);
             findExternal(currTFNode, newItem);
             
         }
 
         
+    }
+    
+    // method creates a root node with index 0
+    private void createRoot(Item newItem) {
+        // create new node with item and set as root
+        TFNode newTFNode = new TFNode();
+        newTFNode.insertItem(0, newItem);
+        setRoot(newTFNode);
     }
 
     private TFNode treeSearch(Object key, TFNode start) {
