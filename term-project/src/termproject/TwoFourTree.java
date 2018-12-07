@@ -72,7 +72,21 @@ public class TwoFourTree implements Dictionary {
         
         // check for root
         if (!isEmpty()) {
-            findExternal(treeRoot, newItem);
+            // TODO: just find external, dont insert
+            // ffgoe and return index
+            // now create item and insert
+            // insert then check for 3
+            // then overflow
+            
+            TFNode externalNode = findExternal(treeRoot, key);
+            
+            // create item here
+            
+            // insert, even if it overflows
+            
+            // now check for 3, and overflow (slip)
+            
+            
         } else {
             createRoot(newItem);
         }
@@ -127,6 +141,11 @@ public class TwoFourTree implements Dictionary {
     
     
     // method splits the current node into 2 new nodes
+    // 4 in there
+    // none shifting remove
+    // what child am i, what child am 1 + 1
+    // assume valid childeren
+    
     private void split (TFNode curr) {
         
         // we need to grab the items
