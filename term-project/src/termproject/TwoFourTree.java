@@ -54,6 +54,7 @@ public class TwoFourTree implements Dictionary {
      */
     public void insertElement(Object key, Object element) {
         
+        //
         // 2, 3, 4 children (except for leaves)
         // each node can store 1, 2, 3 entries
         // num of children equals entries + 1 or 0
@@ -65,13 +66,9 @@ public class TwoFourTree implements Dictionary {
         // A leaf node can have 2, 3 or 4 items but no children. 
         // In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are null.
         // INSERT IS DONE AT THE LEAF!
+        //
         
         Item newItem = new Item(key, element);
-        
-        //
-        // FIND EXTERNAL NODE METHOD
-        // this method recursively finds an external node (assumes root isnt null)
-        //
         
         // check for root
         if (!isEmpty()) {
@@ -86,6 +83,7 @@ public class TwoFourTree implements Dictionary {
         size++;
         
     }
+    
     
     // method recursively finds an external node to place new item
     private void findExternal(TFNode currTFNode, Item newItem) {
@@ -110,14 +108,14 @@ public class TwoFourTree implements Dictionary {
                 split(currTFNode); 
             }
             
-            // TODO: test this
+            // move current
             currTFNode = moveCurr(currTFNode, newItem);
             findExternal(currTFNode, newItem);
             
         }
-
         
     }
+    
     
     // method creates a root node with index 0
     private void createRoot(Item newItem) {
@@ -127,88 +125,51 @@ public class TwoFourTree implements Dictionary {
         setRoot(newTFNode);
     }
     
-     private void split (TFNode curr) {
+    
+    // method splits the current node into 2 new nodes
+    private void split (TFNode curr) {
         
         // we need to grab the items
         Item rightItem = curr.removeItem(2);
         Item midItem = curr.removeItem(1);
         Item leftItem = curr.removeItem(0);
+        TFNode newParent = null;
         
-        if (curr.getParent() == null) {
+        if (curr.getParent() != null) {
             // place middle item in parent
+            // TODO: edge case of adding when full
             curr.getParent().placeItem(midItem, treeComp);
         } else {
-            // make new parent node
-            TFNode Parent = new TFNode();
-            Parent.placeItem(midItem, treeComp);
+            // no parent, so we need to make a new root
+            createRoot(midItem);
+            newParent = treeRoot;
         }
         
-        // IF Current Doesnt havent any Children split with ease
         if (curr.isExternal()) {
         
-            // Make new Left Node
+            // if current does not have any children, split with ease
+            // make 2 new nodes
             TFNode newLeft = new TFNode();
-            // Place org. left item
-            newLeft.placeItem(leftItem, treeComp);
-            // set parent to curr.Parent which removes curr
-            newLeft.setParent(curr.getParent());
-            
-            // Make new Right Node
             TFNode newRight = new TFNode();
-            // Place org. right Item
+            
+            // place items in new left and right nodes
+            newLeft.placeItem(leftItem, treeComp);
             newRight.placeItem(rightItem, treeComp);
-            //  set parent to curr.parent which removes curr
-            newRight.setParent(curr.getParent());
+            
+            // set parent to currents parent, which removes current
+            // TODO: we are losing this data because of only setting parent relationship
+            newLeft.setParent(newParent);
+            newRight.setParent(newParent);
         
         } else {
             
-            // Currnet is internal, handle the children
-          
+            // current is internal
+            // TODO: how do we handle this??
             
         }
-        
-        
-        
-        
-        // TODO: we need to handle creating the new nodes
                 
     }
-    
-    
-
-    
-    
-
-    private TFNode treeSearch(Object key, TFNode start) {
-    
-        TFNode currNode = start;
-        
-        while (currNode != null){
-            
-            int numItems = currNode.getNumItems();
-            
-            for (int i = 0; currNode.getNumItems() < i; i++) {
-                
-                
-                
-                if (treeComp.isLessThan(((Item)currNode.getItem(i)).key(), key)){
-                    
-                    
-                    
-                }
-                
-                if (treeComp.isEqual((Item)currNode.getItem(i).key(), key)) {
-                    
-                    
-                }
-                
-            }
-            
-
-        }
-        
-        return null;
-    }
+   
 
     // method takes a node and returns a new current for whichever child is smaller
     public TFNode moveCurr (TFNode node, Item newItem) {  
@@ -243,7 +204,7 @@ public class TwoFourTree implements Dictionary {
 
         // TEST USING NUMS FROM WEBSITE
         myTree.insertElement(3, 3);
-        myTree.insertElement(2, 2);
+        myTree.insertElement(1, 1);
         myTree.insertElement(5, 5);
         myTree.insertElement(4, 4);
         myTree.insertElement(2, 2);
