@@ -1,9 +1,11 @@
 /**
- * Title:        Term Project 2-4 Trees
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:
- * @author
+ * Title:       Term Project 2-4 Trees
+ * File:        TwoFourTree.java
+ * Description: Class builds a 2-4 Tree which can store items based on its key
+ * Due:         Dec 13, 2018
+ * 
+ * @author Jake Allinson
+ * @author Jacob Sheets
  * @version 1.0
  */
 
@@ -78,24 +80,72 @@ public class TwoFourTree implements Dictionary {
 
         // check the tree
         checkTree();
+        printTree(treeRoot, index);
 
-        //Increment Size, Item Added
+        // increment size
         size++;
         
     }
 
     
     // method corrects an overflowed node
-    private void OverFlow (TFNode currentNode) {
+    private void OverFlow (TFNode currNode) {
         
         // keep running until our curr node, which we move up the tree, isn't overflowed
-        while (currentNode.getNumItems() > currentNode.getMaxItems()) {
+        while (currNode.getNumItems() > currNode.getMaxItems()) {
+
+            // perform a none-shifting remove
+            Item removedItem = currNode.getItem(2);
             
-            // method splits the current node into 2 new nodes
-            // 4 in there
-            // none shifting remove
-            // what child am i, what child am 1 + 1
-            // assume valid childeren
+            // get parent node
+            TFNode parentNode = currNode.getParent();
+            
+            // EDGE CASE: check if there wasn't a parent for current node
+            if (parentNode == null) {
+                
+                // we need a new root, and connect to child
+                parentNode = new TFNode();
+                setRoot(parentNode);
+                // connect to each other
+                currNode.setParent(parentNode);
+                parentNode.setChild(0, currNode);
+                
+            }
+            
+            // put removed item in parent
+            int index = findPos(parentNode, removedItem.key());
+            parentNode.insertItem(index, removedItem);
+         
+            // create new node and connect it to parent's last child
+            TFNode newNode = new TFNode();
+            newNode.addItem(0, currNode.getItem(3));
+            parentNode.setChild(index + 1, newNode);
+            
+            // get last 2 children of our curr node, and put in new node 
+            TFNode currNodeChild3 = currNode.getChild(3);
+            TFNode currNodeChild4 = currNode.getChild(4);
+            newNode.setChild(0, currNodeChild3);
+            newNode.setChild(1, currNodeChild4);
+            
+            // EDGE CASE: check if first child of new node (child 3 of current) is null
+            if (currNodeChild3 != null) {
+                // if we have children, connect them to their newly created parent node (newNode)
+                currNodeChild3.setParent(newNode);
+                currNodeChild4.setParent(newNode);
+            }
+            
+            // erase items and children of curr node that were just moved to new node
+            currNode.deleteItem(3);
+            currNode.deleteItem(2);
+            currNode.setChild(4, null);
+            currNode.setChild(3, null);
+            
+            // connect up our 2 nodes to the parent
+            newNode.setParent(parentNode);
+            currNode.setParent(parentNode);
+            
+            // finally move current
+            currNode = parentNode;
             
         }
         
