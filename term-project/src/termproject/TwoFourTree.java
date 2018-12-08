@@ -54,29 +54,25 @@ public class TwoFourTree implements Dictionary {
      */
     public void insertElement(Object key, Object element) {
 
-        // Node to Insert into
+        // create node that we will insert into
         TFNode insertNode = null;
         
-        // Make Item to insert
-        Item newItem = new Item(key, element);
-        
-        // check for root
-        if (isEmpty()) {
-
-            createRoot(newItem);
-            
+        if (isEmpty()) { 
+            // no root node, so make one
+            insertNode = new TFNode();
+            setRoot(insertNode);
         } else {
-            
-            //Find node to insert into
+            // find node to insert item into
             insertNode = FFGTE(treeRoot, key);
         }
         
-        // Add Item at Correct Position
-        insertNode.insertItem(findPos(insertNode, key), newItem);
+        // now that we have our node, find index and insert our new item
+        int index = findPos(insertNode, key);
+        Item newItem = new Item(key, element);
+        insertNode.insertItem(index, newItem);
         
-        
-        //OverFlow if Currentt Items == Max Items (4)
-        if (insertNode.getNumItems() == insertNode.getMaxItems()) {
+        // if node has more than the max items allowed, run overflow
+        if (insertNode.getNumItems() > insertNode.getMaxItems()) {
             OverFlow(insertNode);
         }
 
@@ -85,26 +81,32 @@ public class TwoFourTree implements Dictionary {
 
         //Increment Size, Item Added
         size++;
+        
     }
+
     
-    
-    // Checks and Corrects if Overflown
+    // method corrects an overflowed node
     private void OverFlow (TFNode currentNode) {
         
-        while (currentNode.getNumItems() == currentNode.getMaxItems()) {
+        // keep running until our curr node, which we move up the tree, isn't overflowed
+        while (currentNode.getNumItems() > currentNode.getMaxItems()) {
             
+            // method splits the current node into 2 new nodes
+            // 4 in there
+            // none shifting remove
+            // what child am i, what child am 1 + 1
+            // assume valid childeren
             
         }
+        
     }
     
     
-    // Find which position key needs to go into the node a < key < b
+    // method finds which position key to place item into in a node
     private int findPos (TFNode currNode, Object key) {
-        
-        for (int i =0; i < currNode.getNumItems(); i++) {
-            
-            if(treeComp.isGreaterThanOrEqualTo(currNode.getItem(i).key(), key)) {
-                
+        // iterate through current node's items to find one >= the key
+        for (int i = 0; i < currNode.getNumItems(); i++) {
+            if (treeComp.isGreaterThanOrEqualTo(currNode.getItem(i).key(), key)) {
                 return i;
             }
         } 
@@ -116,104 +118,26 @@ public class TwoFourTree implements Dictionary {
     private TFNode FFGTE(TFNode currNode, Object key) {
         
         if (currNode.isExternal()) {
-
-                return currNode;
-
+            
+            // our node is a leaf
+            return currNode;
+            
         } else { 
             
-            //Find Position between a < key < b
+            // find position such that a < key < b
             int pos = findPos(currNode, key);
             Item currItem = currNode.getItem(pos);
              
-            //If key == Key then take this node 
+            // if the keys match, then take take that node
             if (treeComp.isEqual(currItem.key(), key)) {
-                 
                  return currNode;
-                 
             } else {
-                
-                // continue to child node
+                // continue to child node and try again
                 return FFGTE(currNode.getChild(pos), key);
             }
+            
         } 
-    }
-    
-    
-    // method creates a root node with index 0
-    private void createRoot(Item newItem) {
         
-        // create new node with item and set as root
-        TFNode newTFNode = new TFNode();
-        newTFNode.insertItem(0, newItem);
-        setRoot(newTFNode);
-    }
-    
-    
-    // method splits the current node into 2 new nodes
-    // 4 in there
-    // none shifting remove
-    // what child am i, what child am 1 + 1
-    // assume valid childeren
-    
-    // TODO: Needs Some Love
-    private void split (TFNode curr) {
-        
-        // we need to grab the items
-        Item rightItem = curr.removeItem(2);
-        Item midItem = curr.removeItem(1);
-        Item leftItem = curr.removeItem(0);
-        TFNode newParent = null;
-        
-        if (curr.getParent() != null) {
-            // place middle item in parent
-            // TODO: edge case of adding when full
-            curr.getParent().placeItem(midItem, treeComp);
-        } else {
-            // no parent, so we need to make a new root
-            createRoot(midItem);
-            newParent = treeRoot;
-        }
-        
-        if (curr.isExternal()) {
-        
-            // if current does not have any children, split with ease
-            // make 2 new nodes
-            TFNode newLeft = new TFNode();
-            TFNode newRight = new TFNode();
-            
-            // place items in new left and right nodes
-            newLeft.placeItem(leftItem, treeComp);
-            newRight.placeItem(rightItem, treeComp);
-            
-            // set parent to currents parent, which removes current
-            // TODO: we are losing this data because of only setting parent relationship
-            newLeft.setParent(newParent);
-            newRight.setParent(newParent);
-        
-        } else {
-            
-            // current is internal
-            // TODO: how do we handle this??
-            
-        }
-                
-    }
-   
-
-    // method takes a node and returns a new current for whichever child is smaller
-    // TODO: Dont know if this needed? maybe.
-    public TFNode moveCurr (TFNode node, Item newItem) {  
-        TFNode currTFNode = node;
-        
-        if (treeComp.isLessThanOrEqualTo(newItem.key(), currTFNode.getItem(0).key())) {
-            // new < 0
-            currTFNode = currTFNode.getChild(0);
-        } else {
-            // new > 0
-            currTFNode = currTFNode.getChild(1);
-        }
-        
-        return currTFNode;
     }
 
 
