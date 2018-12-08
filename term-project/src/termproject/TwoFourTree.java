@@ -53,86 +53,95 @@ public class TwoFourTree implements Dictionary {
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
+
+        // Node to Insert into
+        TFNode insertNode = null;
         
-        //
-        // 2, 3, 4 children (except for leaves)
-        // each node can store 1, 2, 3 entries
-        // num of children equals entries + 1 or 0
-        // 2-Node: Node has two child pointers and 1 data element.
-        // 3-Node: Node has three child pointers and 2 data elements.
-        // 4-Node: Node has four child pointers and 3 data elements.
-        // All leaf nodes are the same height
-        // Each node Stores 3 values at most sorted from smallest to greatest
-        // A leaf node can have 2, 3 or 4 items but no children. 
-        // In other words, a leaf is 2-Node, 3-Node or 4-Node where all children are null.
-        // INSERT IS DONE AT THE LEAF!
-        //
-        
+        // Make Item to insert
         Item newItem = new Item(key, element);
         
         // check for root
-        if (!isEmpty()) {
-            // TODO: just find external, dont insert
-            // ffgoe and return index
-            // now create item and insert
-            // insert then check for 3
-            // then overflow
-            
-            TFNode externalNode = findExternal(treeRoot, key);
-            
-            // create item here
-            
-            // insert, even if it overflows
-            
-            // now check for 3, and overflow (slip)
-            
+        if (isEmpty()) {
+
+            createRoot(newItem);
             
         } else {
-            createRoot(newItem);
+            
+            //Find node to insert into
+            insertNode = FFGTE(treeRoot, key);
         }
         
+        // Add Item at Correct Position
+        insertNode.insertItem(findPos(insertNode, key), newItem);
+        
+        
+        //OverFlow if Currentt Items == Max Items (4)
+        if (insertNode.getNumItems() == insertNode.getMaxItems()) {
+            OverFlow(insertNode);
+        }
+
         // check the tree
-        // checkTree();
-        
+        checkTree();
+
+        //Increment Size, Item Added
         size++;
+    }
+    
+    
+    // Checks and Corrects if Overflown
+    private void OverFlow (TFNode currentNode) {
         
+        while (currentNode.getNumItems() == currentNode.getMaxItems()) {
+            
+            
+        }
+    }
+    
+    
+    // Find which position key needs to go into the node a < key < b
+    private int findPos (TFNode currNode, Object key) {
+        
+        for (int i =0; i < currNode.getNumItems(); i++) {
+            
+            if(treeComp.isGreaterThanOrEqualTo(currNode.getItem(i).key(), key)) {
+                
+                return i;
+            }
+        } 
+        return currNode.getNumItems();
     }
     
     
     // method recursively finds an external node to place new item
-    private void findExternal(TFNode currTFNode, Item newItem) {
+    private TFNode FFGTE(TFNode currNode, Object key) {
         
-        if (currTFNode.isExternal()) {
+        if (currNode.isExternal()) {
 
-            // the node is a leaf, so check if its full (3 items)
-            if (currTFNode.isFull()) {
-                // TODO: split the node
-                split(currTFNode);    
+                return currNode;
+
+        } else { 
+            
+            //Find Position between a < key < b
+            int pos = findPos(currNode, key);
+            Item currItem = currNode.getItem(pos);
+             
+            //If key == Key then take this node 
+            if (treeComp.isEqual(currItem.key(), key)) {
+                 
+                 return currNode;
+                 
             } else {
-                // TODO: test this bad boi
-                currTFNode.placeItem(newItem, treeComp);   
+                
+                // continue to child node
+                return FFGTE(currNode.getChild(pos), key);
             }
-
-        } else {
-
-            // the node is not a leaf, so try again
-            // check if the node is full (3 items)
-            if (currTFNode.isFull()) {
-                // TODO: split the node
-                split(currTFNode); 
-            }
-            
-            // move current
-            currTFNode = moveCurr(currTFNode, newItem);
-            findExternal(currTFNode, newItem);
-            
-        }
-        
+        } 
     }
     
     
     // method creates a root node with index 0
     private void createRoot(Item newItem) {
+        
         // create new node with item and set as root
         TFNode newTFNode = new TFNode();
         newTFNode.insertItem(0, newItem);
@@ -146,6 +155,7 @@ public class TwoFourTree implements Dictionary {
     // what child am i, what child am 1 + 1
     // assume valid childeren
     
+    // TODO: Needs Some Love
     private void split (TFNode curr) {
         
         // we need to grab the items
@@ -191,6 +201,7 @@ public class TwoFourTree implements Dictionary {
    
 
     // method takes a node and returns a new current for whichever child is smaller
+    // TODO: Dont know if this needed? maybe.
     public TFNode moveCurr (TFNode node, Item newItem) {  
         TFNode currTFNode = node;
         
