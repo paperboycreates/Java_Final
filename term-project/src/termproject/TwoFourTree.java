@@ -95,6 +95,7 @@ public class TwoFourTree implements Dictionary {
         while (currNode.getNumItems() > currNode.getMaxItems()) {
 
             // perform a none-shifting remove
+            // TODO: grab 1 or 2
             Item removedItem = currNode.getItem(2);
             
             // get parent node
@@ -119,6 +120,7 @@ public class TwoFourTree implements Dictionary {
             // create new node and connect it to parent's last child
             TFNode newNode = new TFNode();
             newNode.addItem(0, currNode.getItem(3));
+            // use child + 1, like we talked about in class
             parentNode.setChild(index + 1, newNode);
             
             // get last 2 children of our curr node, and put in new node 
@@ -176,17 +178,24 @@ public class TwoFourTree implements Dictionary {
             
             // find position such that a < key < b
             int pos = FFGTE (currNode, key);
-            Item currItem = currNode.getItem(pos);
-             
-            // if the keys match, then take take that node
-            if (treeComp.isEqual (currItem.key(), key)) {
-                 return currNode;
-            } else {
-                // continue to child node and try again
-                return findExternalNode (currNode.getChild(pos), key);
-            }
             
-        } 
+            return findExternalNode (currNode.getChild(pos), key);
+            
+        }  
+             
+//            // if the keys match, then take take that node
+//            if (treeComp.isEqual (currItem.key(), key)) {
+//                 return currNode;
+//            } else {
+//                
+//                // continue to child node and try again
+//                if (currNode.getChild(pos).isExternal()) {
+//                    return currNode;
+//                }
+//
+//                return findExternalNode (currNode.getChild(pos), key);
+//            }
+        
         
     }
 
