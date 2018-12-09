@@ -82,7 +82,7 @@ public class TwoFourTree implements Dictionary {
         checkTree();
         printTree(treeRoot, index);
 
-        // increment size
+        // increment the size of our tree
         size++;
         
     }
@@ -178,24 +178,10 @@ public class TwoFourTree implements Dictionary {
             
             // find position such that a < key < b
             int pos = FFGTE (currNode, key);
-            
+            // lets try again with our new current
             return findExternalNode (currNode.getChild(pos), key);
             
-        }  
-             
-//            // if the keys match, then take take that node
-//            if (treeComp.isEqual (currItem.key(), key)) {
-//                 return currNode;
-//            } else {
-//                
-//                // continue to child node and try again
-//                if (currNode.getChild(pos).isExternal()) {
-//                    return currNode;
-//                }
-//
-//                return findExternalNode (currNode.getChild(pos), key);
-//            }
-        
+        }
         
     }
 
@@ -212,21 +198,9 @@ public class TwoFourTree implements Dictionary {
     }
 
     public static void main(String[] args) {
+        
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
-
-        // TEST USING NUMS FROM WEBSITE
-        myTree.insertElement(3, 3);
-        myTree.insertElement(1, 1);
-        myTree.insertElement(5, 5);
-        myTree.insertElement(4, 4);
-        myTree.insertElement(2, 2);
-        myTree.insertElement(9, 9);
-        myTree.insertElement(10, 10);
-        myTree.insertElement(8, 8);
-        myTree.insertElement(7, 7);
-        myTree.insertElement(6, 6);
-        
         
         Integer myInt1 = new Integer(47);
         myTree.insertElement(myInt1, myInt1);
