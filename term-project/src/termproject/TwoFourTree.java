@@ -11,8 +11,8 @@
 
 package termproject;
 
-import com.sun.xml.internal.ws.util.DOMUtil;
-import java.awt.event.ItemEvent;
+//import com.sun.xml.internal.ws.util.DOMUtil;
+//import java.awt.event.ItemEvent;
 
 public class TwoFourTree implements Dictionary {
 
@@ -45,8 +45,40 @@ public class TwoFourTree implements Dictionary {
      * @param key to be searched for
      * @return object corresponding to key; null if not found
      */
-    public Object findElement(Object key) {
-        return null;
+        public Object findElement (Object key) {
+                
+        TFNode result = findNode(treeRoot, key);
+        
+        int resultPos = FFGTE(result, key);
+        
+        if (treeComp.isEqual(result.getItem(resultPos).key(), key)) {
+            
+            return result.getItem(resultPos).key();
+            
+        // return null if element is not found
+        } else {
+            
+            return null;
+        }
+    }
+    
+    // recursively finds Searched for ndoe of key
+    public TFNode findNode (TFNode currNode, Object key) {
+        
+        int ffgtePos = FFGTE(currNode, key);  
+          
+        if (treeComp.isEqual(currNode.getItem(ffgtePos).key(), key)) {
+
+            return currNode;
+            
+        } else { 
+            
+            if (currNode.isExternal()){
+                return null;
+            }
+            
+            return findNode(currNode.getChild(ffgtePos), key); 
+        }
     }
 
     /**
@@ -101,7 +133,7 @@ public class TwoFourTree implements Dictionary {
 
             // perform a none-shifting remove
             Item removedItem = currNode.getItem(2);
-            currNode.deleteItem(2);
+            
             
             // make parent, which is where we will put our removed item
             TFNode parentNode;
@@ -138,10 +170,6 @@ public class TwoFourTree implements Dictionary {
             // grab 3 child and creat node
             TFNode currNodeChild3 = currNode.getChild(3);
             
-            // Clean house
-            currNode.setChild(3, null);
-            currNode.deleteItem(3);
-            
             // Set child to new Node
             newNode.setChild(0, currNodeChild3);
             
@@ -149,6 +177,11 @@ public class TwoFourTree implements Dictionary {
             TFNode currNodeChild4 = currNode.getChild(4);
             currNode.setChild(4, null);
             newNode.setChild(1, currNodeChild4);
+            
+            // Clean house
+            currNode.setChild(3, null);
+            currNode.deleteItem(3);
+            currNode.deleteItem(2);
             
                         
             // EDGE CASE: check if first child of new node (child 3 of current) is null
