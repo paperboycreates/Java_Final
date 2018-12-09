@@ -65,11 +65,11 @@ public class TwoFourTree implements Dictionary {
             setRoot(insertNode);
         } else {
             // find node to insert item into
-            insertNode = FFGTE(treeRoot, key);
+            insertNode = findExternalNode(treeRoot, key);
         }
         
         // now that we have our node, find index and insert our new item
-        int index = findPos(insertNode, key);
+        int index = FFGTE(insertNode, key);
         Item newItem = new Item(key, element);
         insertNode.insertItem(index, newItem);
         
@@ -113,7 +113,7 @@ public class TwoFourTree implements Dictionary {
             }
             
             // put removed item in parent
-            int index = findPos(parentNode, removedItem.key());
+            int index = FFGTE(parentNode, removedItem.key());
             parentNode.insertItem(index, removedItem);
          
             // create new node and connect it to parent's last child
@@ -153,7 +153,7 @@ public class TwoFourTree implements Dictionary {
     
     
     // method finds which position key to place item into in a node
-    private int findPos (TFNode currNode, Object key) {
+    private int FFGTE (TFNode currNode, Object key) {
         // iterate through current node's items to find one >= the key
         for (int i = 0; i < currNode.getNumItems(); i++) {
             if (treeComp.isGreaterThanOrEqualTo(currNode.getItem(i).key(), key)) {
@@ -165,7 +165,7 @@ public class TwoFourTree implements Dictionary {
     
     
     // method recursively finds an external node to place new item
-    private TFNode FFGTE(TFNode currNode, Object key) {
+    private TFNode findExternalNode(TFNode currNode, Object key) {
         
         if (currNode.isExternal()) {
             
@@ -175,15 +175,15 @@ public class TwoFourTree implements Dictionary {
         } else { 
             
             // find position such that a < key < b
-            int pos = findPos(currNode, key);
+            int pos = FFGTE (currNode, key);
             Item currItem = currNode.getItem(pos);
              
             // if the keys match, then take take that node
-            if (treeComp.isEqual(currItem.key(), key)) {
+            if (treeComp.isEqual (currItem.key(), key)) {
                  return currNode;
             } else {
                 // continue to child node and try again
-                return FFGTE(currNode.getChild(pos), key);
+                return findExternalNode (currNode.getChild(pos), key);
             }
             
         } 
