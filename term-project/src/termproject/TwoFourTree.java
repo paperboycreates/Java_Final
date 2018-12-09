@@ -276,9 +276,9 @@ public class TwoFourTree implements Dictionary {
          myTree.insertElement(54, 54);
          myTree.insertElement(80, 80);
          myTree.insertElement(76, 76);
-
-                  
+         
          System.out.println(myTree.findElement(75));
+         
          
          
         myTree.printAllElements();
