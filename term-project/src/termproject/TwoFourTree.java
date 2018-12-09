@@ -45,12 +45,15 @@ public class TwoFourTree implements Dictionary {
      * @param key to be searched for
      * @return object corresponding to key; null if not found
      */
-        public Object findElement (Object key) {
-                
+    public Object findElement (Object key) {
+               
+        // find node with key in it.
         TFNode result = findNode(treeRoot, key);
         
+        // find key's position (maybe be greater than position or equal to position)
         int resultPos = FFGTE(result, key);
         
+        // if found key, return it.
         if (treeComp.isEqual(result.getItem(resultPos).key(), key)) {
             
             return result.getItem(resultPos).key();
@@ -65,18 +68,22 @@ public class TwoFourTree implements Dictionary {
     // recursively finds Searched for ndoe of key
     public TFNode findNode (TFNode currNode, Object key) {
         
+        // find FFGTE of key looking for
         int ffgtePos = FFGTE(currNode, key);  
           
+        // if key is in this node return it.
         if (treeComp.isEqual(currNode.getItem(ffgtePos).key(), key)) {
 
             return currNode;
             
         } else { 
             
+            // if final node and still hasnt found key return null *mission failed. we'll get them next time boyz*
             if (currNode.isExternal()){
                 return null;
             }
             
+            // recurse down tree to the child connected to FFGTE's key
             return findNode(currNode.getChild(ffgtePos), key); 
         }
     }
@@ -233,7 +240,6 @@ public class TwoFourTree implements Dictionary {
         
     }
 
-
     /**
      * Searches dictionary to determine if key is present, then
      * removes and returns corresponding object
@@ -250,63 +256,28 @@ public class TwoFourTree implements Dictionary {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
         
-        Integer myInt1 = new Integer(47);
-        myTree.insertElement(myInt1, myInt1);
-        
-        Integer myInt2 = new Integer(83);
-        myTree.insertElement(myInt2, myInt2);
-        
-        Integer myInt3 = new Integer(22);
-        myTree.insertElement(myInt3, myInt3);
-
-        Integer myInt4 = new Integer(16);
-        myTree.insertElement(myInt4, myInt4);
-
-        Integer myInt5 = new Integer(49);
-        myTree.insertElement(myInt5, myInt5);
-
-        Integer myInt6 = new Integer(100);
-        myTree.insertElement(myInt6, myInt6);
-
-        Integer myInt7 = new Integer(38);
-        myTree.insertElement(myInt7, myInt7);
-
-        Integer myInt8 = new Integer(3);
-        myTree.insertElement(myInt8, myInt8);
-
-        Integer myInt9 = new Integer(53);
-        myTree.insertElement(myInt9, myInt9);
-
-        Integer myInt10 = new Integer(66);
-        myTree.insertElement(myInt10, myInt10);
-
-        Integer myInt11 = new Integer(19);
-        myTree.insertElement(myInt11, myInt11);
-
-        Integer myInt12 = new Integer(23);
-        myTree.insertElement(myInt12, myInt12);
-
-        Integer myInt13 = new Integer(24);
-        myTree.insertElement(myInt13, myInt13);
-
-        Integer myInt14 = new Integer(88);
-        myTree.insertElement(myInt14, myInt14);
-
-        Integer myInt15 = new Integer(1);
-        myTree.insertElement(myInt15, myInt15);
-
-        Integer myInt16 = new Integer(97);
-        myTree.insertElement(myInt16, myInt16);
-
-        Integer myInt17 = new Integer(94);
-        myTree.insertElement(myInt17, myInt17);
-
-        Integer myInt18 = new Integer(35);
-        myTree.insertElement(myInt18, myInt18);
-
-        Integer myInt19 = new Integer(51);
-        myTree.insertElement(myInt19, myInt19);
-
+         myTree.insertElement(63, 63);
+         myTree.insertElement(1, 1);
+         myTree.insertElement(30, 30);
+         myTree.insertElement(82, 82);
+         myTree.insertElement(60, 60);
+         myTree.insertElement(89, 89);
+         myTree.insertElement(70, 70);
+         myTree.insertElement(27, 27);
+         myTree.insertElement(61, 61);
+         myTree.insertElement(50, 50);
+         myTree.insertElement(38, 38);
+         myTree.insertElement(77, 77);
+         myTree.insertElement(2, 2);
+         myTree.insertElement(32, 32);
+         myTree.insertElement(75, 75);
+         myTree.insertElement(79, 79);
+         myTree.insertElement(65, 65);
+         myTree.insertElement(54, 54);
+         myTree.insertElement(80, 80);
+         myTree.insertElement(76, 76);
+         
+         
         myTree.printAllElements();
         System.out.println("done");
 
