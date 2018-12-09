@@ -86,10 +86,15 @@ public class TwoFourTree implements Dictionary {
         size++;
         
     }
-
+    
     
     // method corrects an overflowed node
     private void OverFlow (TFNode currNode) {
+        
+        // 1. grab item at position 2 (non-shifting remove)
+        // 2. put removed item in parent (check that parent is there)
+        // 3. create new node for after split
+        // 4. 
         
         // keep running until our curr node, which we move up the tree, isn't overflowed
         while (currNode.getNumItems() > currNode.getMaxItems()) {
@@ -98,31 +103,36 @@ public class TwoFourTree implements Dictionary {
             Item removedItem = currNode.getItem(2);
             currNode.deleteItem(2);
             
+            // make parent, which is where we will put our removed item
             TFNode parentNode;
             
-            // EDGE CASE: check if there wasn't a parent for current node
-            if (currNode.getParent() == null) {
+            // EDGE CASE: if curr node is root, we need a new parent (new root)
+            if (currNode == treeRoot) {
                 
-                // we need a new root, and connect to child
+                // make our parent node and connect it to curr node
                 parentNode = new TFNode();
-                setRoot(parentNode);
-                // connect to each other
                 currNode.setParent(parentNode);
                 parentNode.setChild(0, currNode);
                 
+                // make parent the new root
+                setRoot(parentNode);
+                
+            } else {
+                
+                // make our parent node
+                parentNode = currNode.getParent();
+                
             }
-                        
-            // get parent node
-            parentNode = currNode.getParent();
             
             // put removed item in parent
             int index = FFGTE(parentNode, removedItem.key());
             parentNode.insertItem(index, removedItem);
          
-            // create new node and connect it to parent's last child
+            // create new node for the items to the right of the removed item
             TFNode newNode = new TFNode();
+            
+            // connect new node to parent's last child by asking what child am i + 1
             newNode.addItem(0, currNode.getItem(3));
-            // use child + 1, like we talked about in class
             parentNode.setChild(index + 1, newNode);
             
             // grab 3 child and creat node
