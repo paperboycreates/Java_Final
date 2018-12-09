@@ -11,8 +11,8 @@
 
 package termproject;
 
-//import com.sun.xml.internal.ws.util.DOMUtil;
-//import java.awt.event.ItemEvent;
+import com.sun.xml.internal.ws.util.DOMUtil;
+import java.awt.event.ItemEvent;
 
 public class TwoFourTree implements Dictionary {
 
@@ -45,38 +45,9 @@ public class TwoFourTree implements Dictionary {
      * @param key to be searched for
      * @return object corresponding to key; null if not found
      */
-    public Object findElement (Object key) {
-                
-        TFNode result = findNode(treeRoot, key);
-        
-        int resultPos = FFGTE(result, key);
-        
-        if (treeComp.isEqual(result.getItem(resultPos).key(), key)) {
-            
-            return result.getItem(resultPos).key();
-            
-        // return null if element is not found
-        } else {
-            
-            return null;
-        }
+    public Object findElement(Object key) {
+        return null;
     }
-    
-    // recursively finds Searched for ndoe of key
-    public TFNode findNode (TFNode currNode, Object key) {
-        
-        int ffgtePos = FFGTE(currNode, key);  
-          
-        if (treeComp.isEqual(currNode.getItem(ffgtePos).key(), key)) {
-
-            return currNode;
-            
-        } else { 
-
-            return findNode(currNode.getChild(ffgtePos), key); 
-        }
-    }
-    
 
     /**
      * Inserts provided element into the Dictionary
