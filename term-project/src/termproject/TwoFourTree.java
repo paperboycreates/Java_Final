@@ -95,14 +95,13 @@ public class TwoFourTree implements Dictionary {
         while (currNode.getNumItems() > currNode.getMaxItems()) {
 
             // perform a none-shifting remove
-            // TODO: grab 1 or 2
             Item removedItem = currNode.getItem(2);
+            currNode.deleteItem(2);
             
-            // get parent node
-            TFNode parentNode = currNode.getParent();
+            TFNode parentNode;
             
             // EDGE CASE: check if there wasn't a parent for current node
-            if (parentNode == null) {
+            if (currNode.getParent() == null) {
                 
                 // we need a new root, and connect to child
                 parentNode = new TFNode();
@@ -112,6 +111,9 @@ public class TwoFourTree implements Dictionary {
                 parentNode.setChild(0, currNode);
                 
             }
+                        
+            // get parent node
+            parentNode = currNode.getParent();
             
             // put removed item in parent
             int index = FFGTE(parentNode, removedItem.key());
@@ -123,34 +125,37 @@ public class TwoFourTree implements Dictionary {
             // use child + 1, like we talked about in class
             parentNode.setChild(index + 1, newNode);
             
-            // get last 2 children of our curr node, and put in new node 
+            // grab 3 child and creat node
             TFNode currNodeChild3 = currNode.getChild(3);
-            TFNode currNodeChild4 = currNode.getChild(4);
+            
+            // Clean house
+            currNode.setChild(3, null);
+            currNode.deleteItem(3);
+            
+            // Set child to new Node
             newNode.setChild(0, currNodeChild3);
+            
+            // grab 4 child and create node
+            TFNode currNodeChild4 = currNode.getChild(4);
+            currNode.setChild(4, null);
             newNode.setChild(1, currNodeChild4);
             
+                        
             // EDGE CASE: check if first child of new node (child 3 of current) is null
             if (currNodeChild3 != null) {
                 // if we have children, connect them to their newly created parent node (newNode)
                 currNodeChild3.setParent(newNode);
                 currNodeChild4.setParent(newNode);
             }
-            
-            // erase items and children of curr node that were just moved to new node
-            currNode.deleteItem(3);
-            currNode.deleteItem(2);
-            currNode.setChild(4, null);
-            currNode.setChild(3, null);
-            
+
             // connect up our 2 nodes to the parent
             newNode.setParent(parentNode);
             currNode.setParent(parentNode);
             
             // finally move current
             currNode = parentNode;
-            
+     
         }
-        
     }
     
     
