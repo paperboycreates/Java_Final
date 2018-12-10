@@ -262,59 +262,59 @@ public class TwoFourTree implements Dictionary {
     public Object removeElement(Object key) throws ElementNotFoundException {
         
         TFNode foundNode = findNode(treeRoot, (int) key);
-        Object item;
-        int foundPos = 0;
+        Item foundItem;
         
+        if (foundNode == null) {
+            // could not find item in any node
+            throw new ElementNotFoundException ("element not found");
+        }
         
         if (foundNode.isExternal()) {
             
-            // not a 3 node (that will turn into a 2 node)
-            if (foundNode.getNumItems() > 1) {
-                
-                 foundPos = FFGTE(foundNode, key);
-                 
-                 // if found set item to key and remove from tree.
-                 if (treeComp.isEqual(foundNode.getItem(foundPos).key(), key)) { 
-                    item = foundNode.removeItem(foundPos);
-                 
-                 // if not found return exception
-                 } else {
-                     
-                     throw new ElementNotFoundException("ERROR** element not found.");
-                 } 
+            // the node is a leaf, so we can just remove (no swap)
+            // get the index for the item in found node
+            int index = FFGTE(foundNode, key);
+
+            // check if if the key matched the key at index
+            int indexKey = (int) foundNode.getItem(index).key();
+            if (treeComp.isEqual(indexKey, key)) { 
+                // found the item
+               foundItem = foundNode.removeItem(index);
+            } else {
+                // could not find item
+                throw new ElementNotFoundException("element not found.");
             }
+            
         } else {
             
-            // not a 3 node (that will turn into a 2 node)
-            if (foundNode.getNumItems() > 1) {
-                
-                 foundPos = FFGTE(foundNode, key);
-                 
-                 // if found set item to key and remove from tree.
-                 if (treeComp.isEqual(foundNode.getItem(foundPos).key(), key)) {
-                     
-                    // swap down key to a leaf
-                    swapDown(foundNode, key);
-                    // remove item
-                    item = foundNode.removeItem(foundPos);
-                 
-                 // if not found return exception
-                 } else {
-                     
-                     throw new ElementNotFoundException("ERROR** element not found.");
-                 } 
+            // the node is internal, so we have to swap and remove
+            // get the index for the item in found node
+            int index = FFGTE(foundNode, key);
+
+            // check if if the key matched the key at index
+            int indexKey = (int) foundNode.getItem(index).key();
+            if (treeComp.isEqual(indexKey, key)) { 
+                // found the item, so swap and then remove
+                swapDown(foundNode, key);
+                foundItem = foundNode.removeItem(index);
+            } else {
+                // could not find item
+                throw new ElementNotFoundException("element not found.");
+            }
+            
         }
         
-        // if item node not a leaf or root (root can have 0 elements if the only node)
+        // check if we need to underflow and rebalance the tree
         if (foundNode.getNumItems() == 0 && foundNode != root()) {
-            
             underflow(foundNode);
         }
-             
+        
+        // decrement size of the tree and return the item we found
         size--;
-        return (Object) item.key(); // Fix this.
+        return foundItem;
+        
     }
-}
+
 
     private TFNode swapDown(TFNode currNode, Object key) {
         
@@ -385,6 +385,10 @@ public class TwoFourTree implements Dictionary {
         // TEST FINDING ELEMENT
         
         Object element = myTree.findElement(89);
+        
+        // TEST REMOVING ELEMENT
+        
+        int test = (Integer) myTree.removeElement(50);
 
         // TEST INSERTING AND REMOVING ELEMENTS
         
