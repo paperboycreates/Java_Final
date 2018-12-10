@@ -70,17 +70,6 @@ public class TwoFourTree implements Dictionary {
         // item was not found
         return null;
         
-//        // find key's position (maybe be greater than position or equal to position)
-//        int resultPos = FFGTE(resultNode, key);
-//        int itemKey = (int) resultNode.getItem(resultPos).key();
-//        
-//        if (treeComp.isEqual(itemKey, key)) {
-//            // if found key, return it
-//            return resultNode.getItem(resultPos).key();
-//        } else {
-//            // return null if element is not found
-//            return null;
-//        }
     }
     
     // recursively finds Searched for ndoe of key
@@ -313,8 +302,6 @@ public class TwoFourTree implements Dictionary {
         
         myTree = new TwoFourTree(myComp);
         final int TEST_SIZE = 10000;
-        
-        System.out.println(myTree.findElement(75));
 
         for (int i = 0; i < TEST_SIZE; i++) {
             myTree.insertElement(new Integer(i), new Integer(i));
