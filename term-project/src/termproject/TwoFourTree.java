@@ -260,9 +260,96 @@ public class TwoFourTree implements Dictionary {
      * @exception ElementNotFoundException if the key is not in dictionary
      */
     public Object removeElement(Object key) throws ElementNotFoundException {
+        
+        TFNode foundNode = findNode(treeRoot, (int) key);
+        Object item;
+        int foundPos = 0;
+        
+        
+        if (foundNode.isExternal()) {
+            
+            // not a 3 node (that will turn into a 2 node)
+            if (foundNode.getNumItems() > 1) {
+                
+                 foundPos = FFGTE(foundNode, key);
+                 
+                 // if found set item to key and remove from tree.
+                 if (treeComp.isEqual(foundNode.getItem(foundPos).key(), key)) { 
+                    item = foundNode.removeItem(foundPos);
+                 
+                 // if not found return exception
+                 } else {
+                     
+                     throw new ElementNotFoundException("ERROR** element not found.");
+                 } 
+            }
+        } else {
+            
+            // not a 3 node (that will turn into a 2 node)
+            if (foundNode.getNumItems() > 1) {
+                
+                 foundPos = FFGTE(foundNode, key);
+                 
+                 // if found set item to key and remove from tree.
+                 if (treeComp.isEqual(foundNode.getItem(foundPos).key(), key)) {
+                     
+                    // swap down key to a leaf
+                    swapDown(foundNode, key);
+                    // remove item
+                    item = foundNode.removeItem(foundPos);
+                 
+                 // if not found return exception
+                 } else {
+                     
+                     throw new ElementNotFoundException("ERROR** element not found.");
+                 } 
+        }
+        
+        // if item node not a leaf or root (root can have 0 elements if the only node)
+        if (foundNode.getNumItems() == 0 && foundNode != root()) {
+            
+            underflow(foundNode);
+        }
+             
+        size--;
+        return (Object) item.key(); // Fix this.
+    }
+}
+
+    private TFNode swapDown(TFNode currNode, Object key) {
+        
+        int pos = FFGTE(currNode, key);
+        
+        if (!currNode.isExternal()) {
+            TFNode nextNode = currNode.getChild(pos);
+        
+            if (nextNode.getNumItems() > 1) {
+            
+                currNode.removeItem(pos);
+                currNode.addItem(currNode.getNumItems()+1, nextNode.getItem(pos));
+            
+                return swapDown(currNode.getChild(pos), currNode.getItem(pos).key());
+        
+            } else {
+         
+                underflow(currNode);
+            }
+        }
         return null;
     }
 
+    
+    private void underflow(TFNode currNode) {
+        
+
+        
+        
+        
+        
+    }     
+            
+            
+            
     public static void main(String[] args) {
         
         Comparator myComp = new IntegerComparator();
