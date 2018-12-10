@@ -47,45 +47,69 @@ public class TwoFourTree implements Dictionary {
      */
     public Object findElement (Object key) {
                
-        // find node with key in it.
-        TFNode result = findNode(treeRoot, key);
+        // find node with key in it (returns null if not found)
+        TFNode resultNode = findNode(treeRoot, (int) key);
         
-        // find key's position (maybe be greater than position or equal to position)
-        int resultPos = FFGTE(result, key);
-        
-        // if found key, return it.
-        if (treeComp.isEqual(result.getItem(resultPos).key(), key)) {
-            
-            return result.getItem(resultPos).key();
-            
-        // return null if element is not found
-        } else {
-            
+        // could not find the key so return null
+        if (resultNode == null) {
             return null;
         }
+        
+        // check each item
+        for (int i = 0; i < resultNode.getNumItems(); ++i) {
+            
+            // get the key of the current item to compare
+            int itemKey = (int) resultNode.getItem(i).key();
+            if (treeComp.isEqual(itemKey, key)) {
+                // the key is in this node, so return it
+                return resultNode.getItem(i);
+            }
+            
+        }
+        
+        // item was not found
+        return null;
+        
+//        // find key's position (maybe be greater than position or equal to position)
+//        int resultPos = FFGTE(resultNode, key);
+//        int itemKey = (int) resultNode.getItem(resultPos).key();
+//        
+//        if (treeComp.isEqual(itemKey, key)) {
+//            // if found key, return it
+//            return resultNode.getItem(resultPos).key();
+//        } else {
+//            // return null if element is not found
+//            return null;
+//        }
     }
     
     // recursively finds Searched for ndoe of key
-    public TFNode findNode (TFNode currNode, Object key) {
+    public TFNode findNode (TFNode currNode, int key) {
         
         // find FFGTE of key looking for
-        int ffgtePos = FFGTE(currNode, key);  
-          
-        // if key is in this node return it.
-        if (treeComp.isEqual(currNode.getItem(ffgtePos).key(), key)) {
-
-            return currNode;
+        int index = FFGTE(currNode, key); 
+        
+        // check each item
+        for (int i = 0; i < currNode.getNumItems(); ++i) {
             
-        } else { 
-            
-            // if final node and still hasnt found key return null *mission failed. we'll get them next time boyz*
-            if (currNode.isExternal()){
-                return null;
+            // get the key of the current item to compare
+            int itemKey = (int) currNode.getItem(i).key();
+            if (treeComp.isEqual(itemKey, key)) {
+                // the key is in this node, so return it
+                return currNode;
             }
             
-            // recurse down tree to the child connected to FFGTE's key
-            return findNode(currNode.getChild(ffgtePos), key); 
         }
+        
+        // if the curr node is external, the key is not in the tree
+        if (currNode.isExternal()){
+            return null;
+        }
+
+        // move curr, and try again
+        currNode = currNode.getChild(index);
+        return findNode(currNode, key);   
+        
     }
 
     /**
@@ -283,7 +307,7 @@ public class TwoFourTree implements Dictionary {
         
         // TEST FINDING ELEMENT
         
-        System.out.println(myTree.findElement(75));
+        Object element = myTree.findElement(89);
 
         // TEST INSERTING AND REMOVING ELEMENTS
         
