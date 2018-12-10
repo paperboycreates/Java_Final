@@ -133,14 +133,15 @@ public class TwoFourTree implements Dictionary {
         // 1. grab item at position 2 (non-shifting remove)
         // 2. put removed item in parent (check that parent is there)
         // 3. create new node for after split
-        // 4. 
+        // 4. move items to new node
+        // 5. adjust children
+        // 6. clean up where needed
         
         // keep running until our curr node, which we move up the tree, isn't overflowed
         while (currNode.getNumItems() > currNode.getMaxItems()) {
 
             // perform a none-shifting remove
             Item removedItem = currNode.getItem(2);
-            
             
             // make parent, which is where we will put our removed item
             TFNode parentNode;
@@ -166,30 +167,28 @@ public class TwoFourTree implements Dictionary {
             // put removed item in parent
             int index = FFGTE(parentNode, removedItem.key());
             parentNode.insertItem(index, removedItem);
-         
-            // create new node for the items to the right of the removed item
-            TFNode newNode = new TFNode();
             
-            // connect new node to parent's last child by asking what child am i + 1
+            // create new node
+            // we want to connect new node to parent's last child by asking what child am i + 1 and add item
+            TFNode newNode = new TFNode();
             newNode.addItem(0, currNode.getItem(3));
             parentNode.setChild(index + 1, newNode);
             
-            // grab 3 child and creat node
+            // current node's 3rd child
+            // move 3rd child to new node, and then remove its pointer from current
             TFNode currNodeChild3 = currNode.getChild(3);
-            
-            // Set child to new Node
             newNode.setChild(0, currNodeChild3);
-            
-            // grab 4 child and create node
-            TFNode currNodeChild4 = currNode.getChild(4);
-            currNode.setChild(4, null);
-            newNode.setChild(1, currNodeChild4);
-            
-            // Clean house
             currNode.setChild(3, null);
+            
+            // current node's 4th child
+            // move 4th child to new node, and then remove its pointer from current
+            TFNode currNodeChild4 = currNode.getChild(4);
+            newNode.setChild(1, currNodeChild4);
+            currNode.setChild(4, null);
+            
+            // now we can delete the items from curr node
             currNode.deleteItem(3);
             currNode.deleteItem(2);
-            
                         
             // EDGE CASE: check if first child of new node (child 3 of current) is null
             if (currNodeChild3 != null) {
@@ -198,11 +197,11 @@ public class TwoFourTree implements Dictionary {
                 currNodeChild4.setParent(newNode);
             }
 
-            // connect up our 2 nodes to the parent
+            // make sure that our 2 nodes are connected to the parent
             newNode.setParent(parentNode);
             currNode.setParent(parentNode);
             
-            // finally move current
+            // finally move current and try again
             currNode = parentNode;
      
         }
@@ -256,37 +255,42 @@ public class TwoFourTree implements Dictionary {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
         
-         myTree.insertElement(63, 63);
-         myTree.insertElement(1, 1);
-         myTree.insertElement(30, 30);
-         myTree.insertElement(82, 82);
-         myTree.insertElement(60, 60);
-         myTree.insertElement(89, 89);
-         myTree.insertElement(70, 70);
-         myTree.insertElement(27, 27);
-         myTree.insertElement(61, 61);
-         myTree.insertElement(50, 50);
-         myTree.insertElement(38, 38);
-         myTree.insertElement(77, 77);
-         myTree.insertElement(2, 2);
-         myTree.insertElement(32, 32);
-         myTree.insertElement(75, 75);
-         myTree.insertElement(79, 79);
-         myTree.insertElement(65, 65);
-         myTree.insertElement(54, 54);
-         myTree.insertElement(80, 80);
-         myTree.insertElement(76, 76);
-         
-         System.out.println(myTree.findElement(75));
-         
-         
-         
+        // TEST INSERTING BASIC ELEMENTS
+        
+        myTree.insertElement(63, 63);
+        myTree.insertElement(1, 1);
+        myTree.insertElement(30, 30);
+        myTree.insertElement(82, 82);
+        myTree.insertElement(60, 60);
+        myTree.insertElement(89, 89);
+        myTree.insertElement(70, 70);
+        myTree.insertElement(27, 27);
+        myTree.insertElement(61, 61);
+        myTree.insertElement(50, 50);
+        myTree.insertElement(38, 38);
+        myTree.insertElement(77, 77);
+        myTree.insertElement(2, 2);
+        myTree.insertElement(32, 32);
+        myTree.insertElement(75, 75);
+        myTree.insertElement(79, 79);
+        myTree.insertElement(65, 65);
+        myTree.insertElement(54, 54);
+        myTree.insertElement(80, 80);
+        myTree.insertElement(76, 76);
+
         myTree.printAllElements();
         System.out.println("done");
+        
+        // TEST FINDING ELEMENT
+        
+        System.out.println(myTree.findElement(75));
 
+        // TEST INSERTING AND REMOVING ELEMENTS
+        
         myTree = new TwoFourTree(myComp);
         final int TEST_SIZE = 10000;
-
+        
+        System.out.println(myTree.findElement(75));
 
         for (int i = 0; i < TEST_SIZE; i++) {
             myTree.insertElement(new Integer(i), new Integer(i));
