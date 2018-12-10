@@ -294,14 +294,26 @@ public class TwoFourTree implements Dictionary {
             // check if if the key matched the key at index
             int indexKey = (int) foundNode.getItem(index).key();
             if (treeComp.isEqual(indexKey, key)) { 
-                // found the item, so swap and then remove
-                swapDown(foundNode, key);
-                foundItem = foundNode.removeItem(index);
+                
+                // grab item of foundNode
+                Item removeItem = foundNode.getItem(index);
+                
+                // grab suc node, its pos, and its item
+                TFNode sucNode = findSuccessor(foundNode);
+                int sucPos = sucNode.getNumItems();
+                Item sucItem = sucNode.getItem(sucPos);
+                
+                // Swap items in orginal pos and suc pos
+                foundNode.replaceItem(index, sucItem);
+                sucNode.replaceItem(sucPos, removeItem);
+                 
+                // remove FoundNode's Item which was placed in sucNode sucPos
+                foundItem = sucNode.removeItem(sucPos);
+
             } else {
                 // could not find item
                 throw new ElementNotFoundException("element not found.");
             }
-            
         }
         
         // check if we need to underflow and rebalance the tree
@@ -316,39 +328,31 @@ public class TwoFourTree implements Dictionary {
     }
 
 
-    private TFNode swapDown(TFNode currNode, Object key) {
+    private TFNode findSuccessor(TFNode currNode) {
         
-        int pos = FFGTE(currNode, key);
-        
+        // grab the most right position
+        int pos = currNode.getNumItems();
+    
+        // if not external recurse for the farthest right child of currNode
         if (!currNode.isExternal()) {
-            TFNode nextNode = currNode.getChild(pos);
         
-            if (nextNode.getNumItems() > 1) {
+            return findSuccessor (currNode.getChild(pos));
+
+        } else {
             
-                currNode.removeItem(pos);
-                currNode.addItem(currNode.getNumItems()+1, nextNode.getItem(pos));
-            
-                return swapDown(currNode.getChild(pos), currNode.getItem(pos).key());
-        
-            } else {
-         
-                underflow(currNode);
-            }
+            // return leaf Node
+            return currNode;
         }
-        return null;
     }
 
     
     private void underflow(TFNode currNode) {
         
         
-
         
         
         
-        
-    }     
-            
+}
             
             
     public static void main(String[] args) {
