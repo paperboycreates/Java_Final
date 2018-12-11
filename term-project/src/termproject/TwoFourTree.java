@@ -411,18 +411,15 @@ public class TwoFourTree implements Dictionary {
             // put the parent's item at curr pos at end of left sib
     
             leftSib.insertItem(leftSib.getNumItems()-1, parent.getItem(currPos));
+            parent.setChild(currPos, leftSib);
             parent.removeItem(currPos);
-            parent.setChild(currPos, rightSib);
-            parent.setChild(currPos+1, null);
             
         // RIGHT FUSION
         } else if (rightSib != null) {
             
             rightSib.insertItem(0, parent.getItem(currPos));
+            parent.setChild(currPos, rightSib);
             parent.removeItem(currPos);
-            parent.setChild(currPos, leftSib);
-            parent.setChild(currPos-1, null);
-            
             
         }
         
@@ -490,8 +487,6 @@ public class TwoFourTree implements Dictionary {
         int test3 = (Integer) myTree.removeElement(65);
         System.out.println(test3);
         myTree.printAllElements();
-      
-        
        
         System.out.println("done");
 
