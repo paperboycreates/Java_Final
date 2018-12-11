@@ -392,16 +392,16 @@ public class TwoFourTree implements Dictionary {
             // take parent and push down to item node
             // take right child pos 0 and place in parent pos
             
-            currNode.addItem(currNode.getNumItems(), parent.getItem(0));
-            parent.addItem(0, leftSib.getItem(leftSib.getNumItems()-1));
+            currNode.addItem(0, parent.getItem(currPos-1));
+            parent.addItem(currPos-1, leftSib.getItem(leftSib.getNumItems()-1));
             leftSib.removeItem(leftSib.getNumItems()-1);
             
         
         // right transfer
         } else if (rightSib != null && rightSib.getNumItems() > 1){
             
-            currNode.addItem(0, parent.getItem(0));
-            parent.addItem(0, rightSib.getItem(0));
+            currNode.addItem(0, parent.getItem(currPos+1));
+            parent.addItem(currPos+1, rightSib.getItem(0));
             rightSib.removeItem(0);
             
         
