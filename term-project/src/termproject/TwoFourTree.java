@@ -400,8 +400,8 @@ public class TwoFourTree implements Dictionary {
         // right transfer
         } else if (rightSib != null && rightSib.getNumItems() > 1){
             
-            currNode.addItem(0, parent.getItem(currPos+1));
-            parent.addItem(currPos+1, rightSib.getItem(0));
+            currNode.addItem(0, parent.getItem(currPos));
+            parent.replaceItem(currPos, rightSib.getItem(0));
             rightSib.removeItem(0);
             
         
@@ -444,7 +444,7 @@ public class TwoFourTree implements Dictionary {
         myTree.insertElement(82, 82);
         myTree.insertElement(60, 60);
         myTree.insertElement(89, 89);
-        myTree.insertElement(70, 70);
+        //myTree.insertElement(70, 70);
         myTree.insertElement(27, 27);
         myTree.insertElement(61, 61);
         myTree.insertElement(50, 50);
@@ -468,10 +468,20 @@ public class TwoFourTree implements Dictionary {
         
         // TEST REMOVING ELEMENT
         
-        int test = (Integer) myTree.removeElement(50);
+        int test = (Integer) myTree.removeElement(75);
         System.out.println(test);
-        
+         myTree.printAllElements();
+         
+        int test2 = (Integer) myTree.removeElement(76);
+        System.out.println(test2);
         myTree.printAllElements();
+         
+        int test3 = (Integer) myTree.removeElement(65);
+        System.out.println(test3);
+        myTree.printAllElements();
+      
+        
+       
         System.out.println("done");
 
         // TEST INSERTING AND REMOVING ELEMENTS
