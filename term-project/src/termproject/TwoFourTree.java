@@ -72,8 +72,8 @@ public class TwoFourTree implements Dictionary {
         
     }
     
-    // recursively finds Searched for ndoe of key
-    public TFNode findNode (TFNode currNode, int key) {
+    // recursively finds Searched for node of key
+    private TFNode findNode (TFNode currNode, int key) {
         
         // find FFGTE of key looking for
         int index = FFGTE(currNode, key); 
@@ -299,16 +299,16 @@ public class TwoFourTree implements Dictionary {
                 Item removeItem = foundNode.getItem(index);
                 
                 // grab suc node, its pos, and its item
-                TFNode sucNode = findSuccessor(foundNode);
-                int sucPos = sucNode.getNumItems();
-                Item sucItem = sucNode.getItem(sucPos);
+                TFNode sucNode = findSuccessor(foundNode.getChild(index+1));
+                Item sucItem = sucNode.getItem(0);
                 
                 // Swap items in orginal pos and suc pos
                 foundNode.replaceItem(index, sucItem);
-                sucNode.replaceItem(sucPos, removeItem);
+                sucNode.replaceItem(0, removeItem);
                  
                 // remove FoundNode's Item which was placed in sucNode sucPos
-                foundItem = sucNode.removeItem(sucPos);
+                foundNode = sucNode;
+                foundItem = foundNode.removeItem(0);
 
             } else {
                 // could not find item
@@ -323,20 +323,18 @@ public class TwoFourTree implements Dictionary {
         
         // decrement size of the tree and return the item we found
         size--;
-        return foundItem;
+        return (Object) foundItem.element();
         
     }
 
 
     private TFNode findSuccessor(TFNode currNode) {
         
-        // grab the most right position
-        int pos = currNode.getNumItems();
     
-        // if not external recurse for the farthest right child of currNode
+        // if not external recurse for the farthest left child of currNode
         if (!currNode.isExternal()) {
         
-            return findSuccessor (currNode.getChild(pos));
+            return findSuccessor (currNode.getChild(0));
 
         } else {
             
@@ -345,9 +343,85 @@ public class TwoFourTree implements Dictionary {
         }
     }
 
+    private int findNullPosition(TFNode currNode) {
+        
+        for (int i = 0; i < 3; i++) {
+            
+            if (currNode.getItem(i) == null) {
+                return i;
+            }
+        }
+        throw new TwoFourTreeException("remove not found!!");
+    }
+    
+    private int whatChildAmI(TFNode currNode) {
+        
+        TFNode parent = currNode.getParent();
+        
+        for (int i = 0; i < 3; i++) {
+            
+            if (parent.getChild(i) == currNode) {
+                
+                return i;
+            }
+        }
+        return parent.getNumItems();
+    }
     
     private void underflow(TFNode currNode) {
         
+        int nullPos = 0;
+        TFNode parent = currNode.getParent();
+        int parPos = whatChildAmI(currNode);
+        TFNode leftChild = null;
+        TFNode rightChild = null;
+        
+        if (nullPos != 0){
+            leftChild = parent.getChild(nullPos - 1);
+        }
+        
+        if(nullPos < 3) {
+            rightChild = parent.getChild(nullPos + 1);
+        }
+        
+        // left transfer
+        if (leftChild != null && leftChild.getNumItems() > 1) {
+            
+            // take parent and push down to item node
+            // take right child pos 0 and place in parent pos
+            
+            currNode.addItem(currNode.getNumItems(), parent.getItem(parPos));
+            parent.addItem(parPos, leftChild.getItem(leftChild.getNumItems()-1));
+            leftChild.removeItem(leftChild.getNumItems()-1);
+            
+        
+        // right transfer
+        } else if (rightChild != null && rightChild.getNumItems() > 1){
+            
+            currNode.addItem(0, parent.getItem(parPos));
+            parent.addItem(parPos, rightChild.getItem(0));
+            rightChild.removeItem(0);
+            
+        
+        // left fusion
+        } else if (leftChild != null) {
+            
+        
+        // right fusion
+        } else if (rightChild != null) {
+            
+            
+        }
+        
+        
+        
+        
+        // if left has 2 or more items 
+        // if else right has 2 or more items
+        // if has only one sibling or both only have 1 item FUsion
+        // merge with a sibling
+        // pull parent node and merge with sibling too
+        // if parent is underflow now. then transfer/fusion that node
         
         
         
@@ -393,12 +467,16 @@ public class TwoFourTree implements Dictionary {
         // TEST REMOVING ELEMENT
         
         int test = (Integer) myTree.removeElement(50);
+        System.out.println(test);
+        
+        myTree.printAllElements();
+        System.out.println("done");
 
         // TEST INSERTING AND REMOVING ELEMENTS
         
         myTree = new TwoFourTree(myComp);
-        final int TEST_SIZE = 10000;
-
+        final int TEST_SIZE = 25;
+        
         for (int i = 0; i < TEST_SIZE; i++) {
             myTree.insertElement(new Integer(i), new Integer(i));
             //          myTree.printAllElements();
@@ -410,9 +488,9 @@ public class TwoFourTree implements Dictionary {
             if (out != i) {
                 throw new TwoFourTreeException("main: wrong element removed");
             }
-            if (i > TEST_SIZE - 15) {
+            //if (i > TEST_SIZE - 15) { UNCOMMENT FOR FULL TEST
                 myTree.printAllElements();
-            }
+            //} SMALL TESTS
         }
         System.out.println("done");
     }
