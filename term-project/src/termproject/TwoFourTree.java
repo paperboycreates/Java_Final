@@ -403,8 +403,7 @@ public class TwoFourTree implements Dictionary {
             currNode.addItem(0, parent.getItem(currPos));
             parent.replaceItem(currPos, rightSib.getItem(0));
             rightSib.removeItem(0);
-            
-        
+
         // LEFT FUSION
         } else if (leftSib != null) {
             
