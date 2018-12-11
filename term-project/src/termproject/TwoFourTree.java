@@ -387,7 +387,7 @@ public class TwoFourTree implements Dictionary {
         }
         
         // LEFT TRANSFER
-        if (leftSib != null && leftSib.getNumItems() > 1) {
+        if (currPos >= 1 && leftSib != null) {
             
             // take parent and push down to item node
             // take right child pos 0 and place in parent pos
@@ -398,7 +398,7 @@ public class TwoFourTree implements Dictionary {
             
         
         // RIGHT TRANSFER
-        } else if (rightSib != null && rightSib.getNumItems() > 1){
+        } else if (currPos <=2 && rightSib != null){
             
             currNode.addItem(0, parent.getItem(currPos));
             parent.replaceItem(currPos, rightSib.getItem(0));
