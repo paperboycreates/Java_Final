@@ -376,26 +376,14 @@ public class TwoFourTree implements Dictionary {
         TFNode leftSib = null;
         TFNode rightSib = null;
         
-        if (currPos == 0) {
-            // no left, maybe a right
-            rightSib = parent.getChild(1);
+        // check for left sib
+        if (currPos > 0) {
+            leftSib = parent.getChild(currPos - 1);
         }
         
-        if (currPos == 1) {
-            // yes left, maybe a right
-            leftSib = parent.getChild(0);
-            rightSib = parent.getChild(2);
-        }
-        
-        if (currPos == 2) {
-            // yes left, maybe a right
-            leftSib = parent.getChild(1);
-            rightSib = parent.getChild(3); 
-        }
-        
-        if (currPos == 3) {
-            // yes left, no right
-            leftSib = parent.getChild(2);
+        // check for right sib
+        if (currPos < 2) {
+            rightSib = parent.getChild(currPos + 1);
         }
         
         // LEFT TRANSFER
