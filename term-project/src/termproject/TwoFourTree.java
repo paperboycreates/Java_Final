@@ -382,7 +382,7 @@ public class TwoFourTree implements Dictionary {
         }
         
         // check for right sib
-        if (currPos < 2) {
+        if (currPos < 3) {
             rightSib = parent.getChild(currPos + 1);
         }
         
@@ -393,7 +393,7 @@ public class TwoFourTree implements Dictionary {
             // take right child pos 0 and place in parent pos
             
             currNode.addItem(0, parent.getItem(currPos-1));
-            parent.addItem(currPos-1, leftSib.getItem(leftSib.getNumItems()-1));
+            parent.replaceItem(currPos-1, leftSib.getItem(leftSib.getNumItems()-1));
             leftSib.removeItem(leftSib.getNumItems()-1);
             
         
