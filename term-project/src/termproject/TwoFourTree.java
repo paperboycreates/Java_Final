@@ -370,45 +370,59 @@ public class TwoFourTree implements Dictionary {
     
     private void underflow(TFNode currNode) {
         
-        int nullPos = 0;
         TFNode parent = currNode.getParent();
-        int parPos = whatChildAmI(currNode);
-        TFNode leftChild = null;
-        TFNode rightChild = null;
+        int currPos = whatChildAmI(currNode);
         
-        if (nullPos != 0){
-            leftChild = parent.getChild(nullPos - 1);
+        TFNode leftSib = null;
+        TFNode rightSib = null;
+        
+        if (currPos == 0) {
+            // no left, maybe a right
+            rightSib = parent.getChild(1);
         }
         
-        if(nullPos < 3) {
-            rightChild = parent.getChild(nullPos + 1);
+        if (currPos == 1) {
+            // yes left, maybe a right
+            leftSib = parent.getChild(0);
+            rightSib = parent.getChild(2);
         }
         
-        // left transfer
-        if (leftChild != null && leftChild.getNumItems() > 1) {
+        if (currPos == 2) {
+            // yes left, maybe a right
+            leftSib = parent.getChild(1);
+            rightSib = parent.getChild(3); 
+        }
+        
+        if (currPos == 3) {
+            // yes left, no right
+            leftSib = parent.getChild(2);
+        }
+        
+        // LEFT TRANSFER
+        if (leftSib != null && leftSib.getNumItems() > 1) {
             
             // take parent and push down to item node
             // take right child pos 0 and place in parent pos
             
-            currNode.addItem(currNode.getNumItems(), parent.getItem(parPos));
-            parent.addItem(parPos, leftChild.getItem(leftChild.getNumItems()-1));
-            leftChild.removeItem(leftChild.getNumItems()-1);
+            currNode.addItem(currNode.getNumItems(), parent.getItem(0));
+            parent.addItem(0, leftSib.getItem(leftSib.getNumItems()-1));
+            leftSib.removeItem(leftSib.getNumItems()-1);
             
         
         // right transfer
-        } else if (rightChild != null && rightChild.getNumItems() > 1){
+        } else if (rightSib != null && rightSib.getNumItems() > 1){
             
-            currNode.addItem(0, parent.getItem(parPos));
-            parent.addItem(parPos, rightChild.getItem(0));
-            rightChild.removeItem(0);
+            currNode.addItem(0, parent.getItem(0));
+            parent.addItem(0, rightSib.getItem(0));
+            rightSib.removeItem(0);
             
         
         // left fusion
-        } else if (leftChild != null) {
+        } else if (leftSib != null) {
             
         
         // right fusion
-        } else if (rightChild != null) {
+        } else if (rightSib != null) {
             
             
         }
