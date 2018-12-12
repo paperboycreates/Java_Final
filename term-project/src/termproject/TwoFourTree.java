@@ -8,9 +8,9 @@
  * @author Jacob Sheets
  * @version 1.0
  */
-
 package termproject;
 
+import java.util.Random;
 //import com.sun.xml.internal.ws.util.DOMUtil;
 //import java.awt.event.ItemEvent;
 
@@ -380,6 +380,13 @@ public class TwoFourTree implements Dictionary {
     private void underflow(TFNode currNode) {
         
         TFNode parent = currNode.getParent();
+        
+        if (parent == null) {
+            treeRoot = currNode.getChild(0);
+            treeRoot.setParent(null);
+            return;
+        }
+        
         int currPos = whatChildAmI(currNode);
         
         // create sib nodes for LR sibs of curr node
@@ -392,46 +399,71 @@ public class TwoFourTree implements Dictionary {
         }
         
         // check for right sib
-        if (currPos < 3) {
+        if (currPos != parent.getNumItems()) {
             rightSib = parent.getChild(currPos + 1);
         }
         
         // LEFT TRANSFER
-        if (currPos >= 1 && leftSib != null) {
-            
-            // take parent and push down to item node
-            // take right child pos 0 and place in parent pos
+        if (currPos >= 1 && leftSib != null && leftSib.getNumItems() > 1) {
             
             currNode.addItem(0, parent.getItem(currPos-1));
             parent.replaceItem(currPos-1, leftSib.getItem(leftSib.getNumItems()-1));
+            
+           currNode.setChild(0, leftSib.getChild(leftSib.getNumItems()-1));
+            if (currNode.getChild(0) != null) {
+                currNode.getChild(0).setParent(currNode);
+            }
+           
+           
             leftSib.removeItem(leftSib.getNumItems()-1);
             
         
         // RIGHT TRANSFER
-        } else if (currPos <=2 && rightSib != null){
+        } else if (currPos <=2 && rightSib != null && rightSib.getNumItems() > 1){
             
             currNode.addItem(0, parent.getItem(currPos));
             parent.replaceItem(currPos, rightSib.getItem(0));
+            
+            currNode.setChild(1, rightSib.getChild(0));
+            if (currNode.getChild(1) != null) {
+                currNode.getChild(1).setParent(currNode);
+            }
+            
             rightSib.removeItem(0);
 
         // LEFT FUSION
         } else if (leftSib != null) {
             
-            // put the parent's item at curr pos at end of left sib
-    
-            leftSib.insertItem(leftSib.getNumItems()-1, parent.getItem(currPos));
-            parent.setChild(currPos, leftSib);
-            parent.removeItem(currPos);
+            // put parent item  at curr pos in right sib
+            leftSib.insertItem(leftSib.getNumItems() - 1, parent.getItem(currPos-1));
+            parent.removeItem(currPos-1);
+            
+            // move curr child to left sib and set parent
+            leftSib.setChild(leftSib.getNumItems(), currNode.getChild(0));
+            
+            if (leftSib.getChild(0) != null) {
+                leftSib.getChild(0).setParent(leftSib);
+            }
+            
             
         // RIGHT FUSION
         } else if (rightSib != null) {
             
+            // put parent item  at curr pos in right sib
             rightSib.insertItem(0, parent.getItem(currPos));
-            parent.setChild(currPos, rightSib);
             parent.removeItem(currPos);
             
-        }
-  
+            // move curr child to right sib and set parent
+            rightSib.setChild(0, currNode.getChild(0));
+            
+            if (rightSib.getChild(0) != null) {
+                rightSib.getChild(0).setParent(rightSib);
+            }
+            
+            if (parent.getNumItems() == 0) {
+                underflow(parent);
+            } 
+        }  
     }
             
             
@@ -439,67 +471,56 @@ public class TwoFourTree implements Dictionary {
         
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
-        
-        // TEST INSERTING BASIC ELEMENTS
-        
-        myTree.insertElement(63, 63);
-        myTree.insertElement(1, 1);
-        myTree.insertElement(30, 30);
-        myTree.insertElement(82, 82);
-        myTree.insertElement(60, 60);
-        myTree.insertElement(89, 89);
-        //myTree.insertElement(70, 70);
-        myTree.insertElement(27, 27);
-        myTree.insertElement(61, 61);
-        myTree.insertElement(50, 50);
-        myTree.insertElement(38, 38);
-        myTree.insertElement(77, 77);
-        myTree.insertElement(2, 2);
-        myTree.insertElement(32, 32);
-        myTree.insertElement(75, 75);
-        myTree.insertElement(79, 79);
-        myTree.insertElement(65, 65);
-        myTree.insertElement(54, 54);
-        myTree.insertElement(80, 80);
-        myTree.insertElement(76, 76);
 
-        myTree.printAllElements();
-        System.out.println("done");
-        
         // TEST FINDING ELEMENT
         
-        Object element = myTree.findElement(89);
+     //   Object element = myTree.findElement(89);
         
         // TEST REMOVING ELEMENT
         
-        int test = (Integer) myTree.removeElement(75);
-        System.out.println(test);
-         myTree.printAllElements();
-         
-        int test2 = (Integer) myTree.removeElement(76);
-        System.out.println(test2);
-        myTree.printAllElements();
-         
-        int test3 = (Integer) myTree.removeElement(65);
-        System.out.println(test3);
-        myTree.printAllElements();
-       
-        System.out.println("done");
+//        int test = (Integer) myTree.removeElement(75);
+//        System.out.println(test);
+//         myTree.printAllElements();
+//         
+//        int test2 = (Integer) myTree.removeElement(76);
+//        System.out.println(test2);
+//        myTree.printAllElements();
+//         
+//        int test3 = (Integer) myTree.removeElement(65);
+//        System.out.println(test3);
+//        myTree.printAllElements();
+//       
+//        System.out.println("done");
 
         // TEST INSERTING AND REMOVING ELEMENTS
         
         myTree = new TwoFourTree(myComp);
         final int TEST_SIZE = 25;
         
+        int seed = 2;
+        Random generator = new Random(seed);
+        int num =0;
+        int myArray[] = new int[TEST_SIZE];
+        
         for (int i = 0; i < TEST_SIZE; i++) {
-            myTree.insertElement(new Integer(i), new Integer(i));
-            //          myTree.printAllElements();
-            //         myTree.checkTree();
+           num = generator.nextInt(TEST_SIZE);
+            myTree.insertElement(num, num);
+            myArray[i] = num;
+            myTree.checkTree();
         }
-        System.out.println("removing");
+        
+        System.out.println("REMOVING ELEMENTS");
         for (int i = 0; i < TEST_SIZE; i++) {
-            int out = (Integer) myTree.removeElement(new Integer(i));
-            if (out != i) {
+             System.out.println("-----");
+            System.out.println("removing..." + myArray[i]);
+            int out = (Integer) myTree.removeElement(myArray[i]);
+            
+            System.out.println("removing... array." + myArray[i]);
+             System.out.println("-----");
+            
+            
+            myTree.checkTree();
+            if (out != myArray[i]) {
                 throw new TwoFourTreeException("main: wrong element removed");
             }
             //if (i > TEST_SIZE - 15) { UNCOMMENT FOR FULL TEST
