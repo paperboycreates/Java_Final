@@ -516,7 +516,7 @@ public class TwoFourTree implements Dictionary {
             int out = (Integer) myTree.removeElement(myArray[i]);
             
             System.out.println("removing... array." + myArray[i]);
-             System.out.println("-----");
+            System.out.println("-----");
             
             
             myTree.checkTree();
