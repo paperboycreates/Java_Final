@@ -39,6 +39,7 @@ public class TwoFourTree implements Dictionary {
     public boolean isEmpty() {
         return (size == 0);
     }
+    
 
     /**
      * Searches dictionary to determine if key is present
@@ -72,7 +73,8 @@ public class TwoFourTree implements Dictionary {
         
     }
     
-    // recursively finds Searched for node of key
+    
+    // recursively finds node to put key into
     private TFNode findNode (TFNode currNode, int key) {
         
         // find FFGTE of key looking for
@@ -100,6 +102,7 @@ public class TwoFourTree implements Dictionary {
         return findNode(currNode, key);   
         
     }
+    
 
     /**
      * Inserts provided element into the Dictionary
@@ -251,6 +254,7 @@ public class TwoFourTree implements Dictionary {
         }
         
     }
+    
 
     /**
      * Searches dictionary to determine if key is present, then
@@ -328,51 +332,57 @@ public class TwoFourTree implements Dictionary {
     }
 
 
+    // method to find the successor of a node
     private TFNode findSuccessor(TFNode currNode) {
-        
     
-        // if not external recurse for the farthest left child of currNode
         if (!currNode.isExternal()) {
-        
+            // if not external recurse for the farthest left child of currNode
             return findSuccessor (currNode.getChild(0));
-
         } else {
-            
             // return leaf Node
             return currNode;
         }
+        
     }
+    
 
+    // method finds the first null position in node
     private int findNullPosition(TFNode currNode) {
+
         
         for (int i = 0; i < 3; i++) {
-            
             if (currNode.getItem(i) == null) {
                 return i;
             }
         }
         throw new TwoFourTreeException("remove not found!!");
+        
     }
     
+    
+    // method returns the index that the curr node is in its parent
     private int whatChildAmI(TFNode currNode) {
         
+        // create parent and loop through to find matching node
         TFNode parent = currNode.getParent();
-        
         for (int i = 0; i < 3; i++) {
-            
             if (parent.getChild(i) == currNode) {
-                
+                // we found the index, so return it
                 return i;
             }
         }
         return parent.getNumItems();
+        
     }
     
+    
+    // method corrects underflow in the tree by running LR transfers and LR fusions
     private void underflow(TFNode currNode) {
         
         TFNode parent = currNode.getParent();
         int currPos = whatChildAmI(currNode);
         
+        // create sib nodes for LR sibs of curr node
         TFNode leftSib = null;
         TFNode rightSib = null;
         
@@ -421,21 +431,8 @@ public class TwoFourTree implements Dictionary {
             parent.removeItem(currPos);
             
         }
-        
-        
-        
-        
-        // if left has 2 or more items 
-        // if else right has 2 or more items
-        // if has only one sibling or both only have 1 item FUsion
-        // merge with a sibling
-        // pull parent node and merge with sibling too
-        // if parent is underflow now. then transfer/fusion that node
-        
-        
-        
-        
-}
+  
+    }
             
             
     public static void main(String[] args) {
