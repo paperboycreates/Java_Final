@@ -8,11 +8,10 @@
  * @author Jacob Sheets
  * @version 1.0
  */
+
 package termproject;
 
 import java.util.Random;
-//import com.sun.xml.internal.ws.util.DOMUtil;
-//import java.awt.event.ItemEvent;
 
 public class TwoFourTree implements Dictionary {
 
@@ -135,7 +134,7 @@ public class TwoFourTree implements Dictionary {
 
         // check the tree
         checkTree();
-        printTree(treeRoot, index);
+        // printTree(treeRoot, index);
 
         // increment the size of our tree
         size++;
@@ -226,6 +225,7 @@ public class TwoFourTree implements Dictionary {
     
     // method finds which position key to place item into in a node
     private int FFGTE (TFNode currNode, Object key) {
+        
         // iterate through current node's items to find one >= the key
         for (int i = 0; i < currNode.getNumItems(); i++) {
             if (treeComp.isGreaterThanOrEqualTo(currNode.getItem(i).key(), key)) {
@@ -233,6 +233,7 @@ public class TwoFourTree implements Dictionary {
             }
         } 
         return currNode.getNumItems();
+        
     }
     
     
@@ -300,23 +301,23 @@ public class TwoFourTree implements Dictionary {
             if (treeComp.isEqual(indexKey, key)) { 
                 
                 // grab item of foundNode
-                Item removeItem = foundNode.getItem(index);
+                foundItem = foundNode.getItem(index);
                 
                 // grab suc node, its pos, and its item
                 TFNode sucNode = findSuccessor(foundNode.getChild(index+1));
-                Item sucItem = sucNode.getItem(0);
+                Item sucItem = sucNode.removeItem(0);
                 
-                // Swap items in orginal pos and suc pos
+                // swap items in orginal pos and suc pos
                 foundNode.replaceItem(index, sucItem);
-                sucNode.replaceItem(0, removeItem);
                  
-                // remove FoundNode's Item which was placed in sucNode sucPos
+                // let found node now be its suc
                 foundNode = sucNode;
-                foundItem = foundNode.removeItem(0);
 
             } else {
+                
                 // could not find item
                 throw new ElementNotFoundException("element not found.");
+                
             }
         }
         
@@ -345,20 +346,6 @@ public class TwoFourTree implements Dictionary {
         
     }
     
-
-    // method finds the first null position in node
-    private int findNullPosition(TFNode currNode) {
-
-        
-        for (int i = 0; i < 3; i++) {
-            if (currNode.getItem(i) == null) {
-                return i;
-            }
-        }
-        throw new TwoFourTreeException("remove not found!!");
-        
-    }
-    
     
     // method returns the index that the curr node is in its parent
     private int whatChildAmI(TFNode currNode) {
@@ -381,12 +368,14 @@ public class TwoFourTree implements Dictionary {
         
         TFNode parent = currNode.getParent();
         
+        // EDGE CASE: our curr is the root, so make new root
         if (parent == null) {
             treeRoot = currNode.getChild(0);
             treeRoot.setParent(null);
             return;
         }
         
+        // get pos (index) to be used in rearranging items and children
         int currPos = whatChildAmI(currNode);
         
         // create sib nodes for LR sibs of curr node
@@ -406,16 +395,17 @@ public class TwoFourTree implements Dictionary {
         // LEFT TRANSFER
         if (currPos >= 1 && leftSib != null && leftSib.getNumItems() > 1) {
             
-            currNode.addItem(0, parent.getItem(currPos-1));
+            currNode.insertItem(0, parent.getItem(currPos-1));
             parent.replaceItem(currPos-1, leftSib.getItem(leftSib.getNumItems()-1));
             
-           currNode.setChild(0, leftSib.getChild(leftSib.getNumItems()-1));
+            currNode.setChild(0, leftSib.getChild(leftSib.getNumItems()));
+            
             if (currNode.getChild(0) != null) {
                 currNode.getChild(0).setParent(currNode);
             }
            
            
-            leftSib.removeItem(leftSib.getNumItems()-1);
+            leftSib.deleteItem(leftSib.getNumItems()-1);
             
         
         // RIGHT TRANSFER
@@ -435,16 +425,20 @@ public class TwoFourTree implements Dictionary {
         } else if (leftSib != null) {
             
             // put parent item  at curr pos in right sib
-            leftSib.insertItem(leftSib.getNumItems() - 1, parent.getItem(currPos-1));
+            leftSib.addItem(1, parent.getItem(currPos-1));
             parent.removeItem(currPos-1);
+            parent.setChild(currPos - 1, leftSib);
             
             // move curr child to left sib and set parent
-            leftSib.setChild(leftSib.getNumItems(), currNode.getChild(0));
+            leftSib.setChild(2, currNode.getChild(0));
             
-            if (leftSib.getChild(0) != null) {
-                leftSib.getChild(0).setParent(leftSib);
+            if (leftSib.getChild(2) != null) {
+                leftSib.getChild(2).setParent(leftSib);
             }
             
+            if (parent.getNumItems() == 0) {
+                underflow(parent);
+            }
             
         // RIGHT FUSION
         } else if (rightSib != null) {
@@ -495,11 +489,11 @@ public class TwoFourTree implements Dictionary {
         // TEST INSERTING AND REMOVING ELEMENTS
         
         myTree = new TwoFourTree(myComp);
-        final int TEST_SIZE = 25;
+        final int TEST_SIZE = 100000;
         
         int seed = 2;
-        Random generator = new Random(seed);
-        int num =0;
+        Random generator = new Random();
+        int num = 0;
         int myArray[] = new int[TEST_SIZE];
         
         for (int i = 0; i < TEST_SIZE; i++) {
@@ -511,21 +505,22 @@ public class TwoFourTree implements Dictionary {
         
         System.out.println("REMOVING ELEMENTS");
         for (int i = 0; i < TEST_SIZE; i++) {
-             System.out.println("-----");
-            System.out.println("removing..." + myArray[i]);
-            int out = (Integer) myTree.removeElement(myArray[i]);
             
-            System.out.println("removing... array." + myArray[i]);
-            System.out.println("-----");
+            if (i > TEST_SIZE - 25) { 
+                System.out.println("removing..." + myArray[i]);
+                //myTree.printAllElements();
+            } 
+            
+            int out = (Integer) myTree.removeElement(myArray[i]);
             
             
             myTree.checkTree();
             if (out != myArray[i]) {
                 throw new TwoFourTreeException("main: wrong element removed");
             }
-            //if (i > TEST_SIZE - 15) { UNCOMMENT FOR FULL TEST
+            if (i > TEST_SIZE - 25) { 
                 myTree.printAllElements();
-            //} SMALL TESTS
+            } 
         }
         System.out.println("done");
     }
