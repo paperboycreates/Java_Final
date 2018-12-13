@@ -465,44 +465,26 @@ public class TwoFourTree implements Dictionary {
         
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
-
-        // TEST FINDING ELEMENT
         
-     //   Object element = myTree.findElement(89);
-        
-        // TEST REMOVING ELEMENT
-        
-//        int test = (Integer) myTree.removeElement(75);
-//        System.out.println(test);
-//         myTree.printAllElements();
-//         
-//        int test2 = (Integer) myTree.removeElement(76);
-//        System.out.println(test2);
-//        myTree.printAllElements();
-//         
-//        int test3 = (Integer) myTree.removeElement(65);
-//        System.out.println(test3);
-//        myTree.printAllElements();
-//       
-//        System.out.println("done");
-
         // TEST INSERTING AND REMOVING ELEMENTS
-        
-        myTree = new TwoFourTree(myComp);
+
         final int TEST_SIZE = 100000;
         
+        // set up random num generator
         int seed = 2;
         Random generator = new Random();
         int num = 0;
         int myArray[] = new int[TEST_SIZE];
         
+        // put TEST_SIZE on the tree and store each num in array
         for (int i = 0; i < TEST_SIZE; i++) {
-           num = generator.nextInt(TEST_SIZE);
+            num = generator.nextInt(TEST_SIZE);
             myTree.insertElement(num, num);
             myArray[i] = num;
             myTree.checkTree();
         }
         
+        // remove TEST_SIZE nums from tree and check that they match
         System.out.println("REMOVING ELEMENTS");
         for (int i = 0; i < TEST_SIZE; i++) {
             
@@ -512,19 +494,23 @@ public class TwoFourTree implements Dictionary {
             } 
             
             int out = (Integer) myTree.removeElement(myArray[i]);
-            
-            
             myTree.checkTree();
+            
             if (out != myArray[i]) {
                 throw new TwoFourTreeException("main: wrong element removed");
             }
-            if (i > TEST_SIZE - 25) { 
-                myTree.printAllElements();
-            } 
+            
+            // use to check last few removes from tree
+            //if (i > TEST_SIZE - 25) { 
+            //    myTree.printAllElements();
+            //} 
+            
         }
+        
         System.out.println("done");
+        
     }
-
+    
     public void printAllElements() {
         int indent = 0;
         if (root() == null) {
